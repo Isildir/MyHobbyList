@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MyBookList.ViewModels.GameFormViewModel>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var user = Request.IsAuthenticated;
+}
+
+<h2>Games List</h2>
+
+<p>
+    @if(user){@Html.ActionLink("Add new game", "New", "Games", null, new { @class = "btn btn-primary" })}
+</p>
+
+<table style="width: 100%" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Game Title</th>
+            @if (user)
+            {
+                <th></th>
+            }
+            <th>Studio</th>
+            <th>Release Date</th>
+            <th>Game Genre</th>
+            <th>Game Description</th>
+        </tr>
+    </thead>
+
+    @foreach (var game in Model)
+    {
+        <tr>
+            <th>@Html.ActionLink(game.Game.Title, "Details", "Games", new { id = game.Game.Id }, null)</th>
+            @if (user)
+            {
+                <th>@Html.ActionLink("Add to my Base", "AddToUserBase", "Games", new { id = game.Game.Id }, null)</th>
+            }
+            <th>@game.Game.Studio</th>
+            <th>@game.Game.ReleaseDate.ToShortDateString()</th>
+            <th>@game.Game.GameGenre.Name</th>
+            <th>@game.Game.Description</th>
+            @if (game.CanEdit && user)
+            {
+                <th>@Html.ActionLink("Edit Game", "Edit", "Games", new { id = game.Game.Id }, null)</th>
+            }
+            @if (!game.InUse && user && game.CanEdit)
+            {
+                <th>@Html.ActionLink("Delete Game", "Edit", "Books", new { id = game.Game.Id }, null)</th>
+            }
+        </tr>
+    }
+</table>

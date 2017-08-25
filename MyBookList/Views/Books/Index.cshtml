@@ -1,0 +1,59 @@
+﻿@model IEnumerable<MyBookList.ViewModels.BookFormViewModel>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var user = Request.IsAuthenticated;
+}
+
+<h2>Books List</h2>
+
+<p>
+    @if (user) {@Html.ActionLink("Add new book", "New", "Books", null, new { @class = "btn btn-primary" })}
+</p>
+
+<table style="width: 100%" class="table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>Book Title</th>
+        @if (user)
+        {
+            <th></th>
+        }
+        <th>Book Author</th>
+        <th>Release Date</th>
+        <th>Book Genre</th>
+        <th>Book Description</th>
+    </tr>
+    </thead>
+    
+
+    @foreach (var book in Model)
+    {
+        <tr>
+            <th>@Html.ActionLink(book.Book.Title, "Details", "Books", new {id = book.Book.Id }, null)</th>
+            @if (user)
+            {
+                <th>@Html.ActionLink("Add to my Base", "AddToUserBase","Books",new {id = book.Book.Id }, null)</th>
+            }
+            <th>@book.Book.Author</th>
+            <th>@book.Book.ReleaseDate.ToShortDateString()</th>
+            <th>@book.Book.BookGenre.Name</th>
+            <th>@book.Book.Description</th>
+            @if (book.CanEdit && user)
+            {
+                <th>@Html.ActionLink("Edit Book", "Edit", "Books", new { id = book.Book.Id }, null)</th>
+            }
+            else
+            {
+                <th class="gray-button">Edit Book</th>
+            }
+            @if (!book.InUse && user && book.CanEdit)
+            {
+                <th>@Html.ActionLink("Delete Book", "Edit", "Books", new { id = book.Book.Id }, null)</th>
+                
+            }
+        </tr>
+    }
+</table>

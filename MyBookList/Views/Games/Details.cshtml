@@ -1,0 +1,15 @@
+﻿@model MyBookList.Models.Game
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var user = Request.IsAuthenticated;
+}
+
+<h2>@Model.Title</h2>
+
+<li>@Model.Studio</li>
+<li>@Model.ReleaseDate.ToShortDateString()</li>
+<li>@Model.GameGenre.Name</li>
+<li>@Model.Description</li>

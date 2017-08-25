@@ -1,0 +1,39 @@
+﻿@model MyBookList.ViewModels.GameFormViewModel
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>title</h2>
+
+@using (Html.BeginForm("Update", "Games"))
+{
+    @Html.ValidationSummary()
+    <div class="form-group">
+        @Html.LabelFor(m => m.Game.Title)
+        @Html.TextBoxFor(m => m.Game.Title, new { @class = "form-control" })
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.Game.ReleaseDate)
+        @Html.TextBoxFor(m => m.Game.ReleaseDate, "{0}:d MMM yyyy", new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Game.GameGenreId)
+        @Html.DropDownListFor(m => m.Game.GameGenreId, new SelectList(Model.GameGenre, "Id", "Name"), "Select Genre", new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Game.Studio)
+        @Html.TextBoxFor(m => m.Game.Studio, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Game.Description)
+        @Html.TextAreaFor(m => m.Game.Description, new { @class = "form-control" })
+    </div>
+
+    @Html.HiddenFor(m => m.Game.Id);
+    <button type="submit" class="btn btn-primary">Add a Book</button>
+}

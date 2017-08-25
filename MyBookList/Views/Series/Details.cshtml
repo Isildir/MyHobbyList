@@ -1,0 +1,14 @@
+﻿@model MyBookList.Models.Series
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var user = Request.IsAuthenticated;
+}
+
+<h2>@Model.Title</h2>
+
+<li>@Model.NumberOfSeasons</li>
+<li>@Model.ReleaseDate.ToShortDateString()</li>
+<li>@Model.Description</li>

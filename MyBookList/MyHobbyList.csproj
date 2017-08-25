@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -189,16 +190,92 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BooksController.cs" />
+    <Compile Include="Controllers\GamesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MoviesController.cs" />
+    <Compile Include="Controllers\SeriesController.cs" />
+    <Compile Include="Controllers\UserProfileController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708210940118_AddingModelsToDb.cs" />
+    <Compile Include="Migrations\201708210940118_AddingModelsToDb.Designer.cs">
+      <DependentUpon>201708210940118_AddingModelsToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708210953254_PopulationgGenresList.cs" />
+    <Compile Include="Migrations\201708210953254_PopulationgGenresList.Designer.cs">
+      <DependentUpon>201708210953254_PopulationgGenresList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708211319183_PopulatingBooksTableToTests.cs" />
+    <Compile Include="Migrations\201708211319183_PopulatingBooksTableToTests.Designer.cs">
+      <DependentUpon>201708211319183_PopulatingBooksTableToTests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708211404164_ChangesInBookModel.cs" />
+    <Compile Include="Migrations\201708211404164_ChangesInBookModel.Designer.cs">
+      <DependentUpon>201708211404164_ChangesInBookModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708212123135_PopulatingGamesTableToTests.cs" />
+    <Compile Include="Migrations\201708212123135_PopulatingGamesTableToTests.Designer.cs">
+      <DependentUpon>201708212123135_PopulatingGamesTableToTests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708221504469_changingBookModel.cs" />
+    <Compile Include="Migrations\201708221504469_changingBookModel.Designer.cs">
+      <DependentUpon>201708221504469_changingBookModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708221616176_changingOthersModel.cs" />
+    <Compile Include="Migrations\201708221616176_changingOthersModel.Designer.cs">
+      <DependentUpon>201708221616176_changingOthersModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708221708250_changingOthersModel2.cs" />
+    <Compile Include="Migrations\201708221708250_changingOthersModel2.Designer.cs">
+      <DependentUpon>201708221708250_changingOthersModel2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708232224580_DeletingUserModel.cs" />
+    <Compile Include="Migrations\201708232224580_DeletingUserModel.Designer.cs">
+      <DependentUpon>201708232224580_DeletingUserModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708240956484_NewUsersDataManagementSystem.cs" />
+    <Compile Include="Migrations\201708240956484_NewUsersDataManagementSystem.Designer.cs">
+      <DependentUpon>201708240956484_NewUsersDataManagementSystem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708241035279_TryingToUseUserIdAsaString.cs" />
+    <Compile Include="Migrations\201708241035279_TryingToUseUserIdAsaString.Designer.cs">
+      <DependentUpon>201708241035279_TryingToUseUserIdAsaString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708241502404_TryingToUseUserIdAsaString2.cs" />
+    <Compile Include="Migrations\201708241502404_TryingToUseUserIdAsaString2.Designer.cs">
+      <DependentUpon>201708241502404_TryingToUseUserIdAsaString2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708251103241_AddUserIdToCreatedItems.cs" />
+    <Compile Include="Migrations\201708251103241_AddUserIdToCreatedItems.Designer.cs">
+      <DependentUpon>201708251103241_AddUserIdToCreatedItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ExtensionBook.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Book.cs" />
+    <Compile Include="Models\BookGenre.cs" />
+    <Compile Include="Models\Game.cs" />
+    <Compile Include="Models\GameGenre.cs" />
+    <Compile Include="Models\Movie.cs" />
+    <Compile Include="Models\MovieGenre.cs" />
+    <Compile Include="Models\Series.cs" />
+    <Compile Include="Models\UserBooksList.cs" />
+    <Compile Include="Models\UserGamesList.cs" />
+    <Compile Include="Models\UserMoviesList.cs" />
+    <Compile Include="Models\UserSeriesList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\BookFormViewModel.cs" />
+    <Compile Include="ViewModels\GameFormViewModel.cs" />
+    <Compile Include="ViewModels\MovieFormViewModel.cs" />
+    <Compile Include="ViewModels\SeriesFormViewModel.cs" />
+    <Compile Include="ViewModels\UserProfileViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelSharedProperties.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -257,6 +334,20 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Books\Index.cshtml" />
+    <Content Include="Views\Games\Index.cshtml" />
+    <Content Include="Views\Movies\Index.cshtml" />
+    <Content Include="Views\Series\Index.cshtml" />
+    <Content Include="Views\Books\Details.cshtml" />
+    <Content Include="Views\Games\Details.cshtml" />
+    <Content Include="Views\Shared\_NavBar.cshtml" />
+    <Content Include="Views\Books\BookForm.cshtml" />
+    <Content Include="Views\Games\GameForm.cshtml" />
+    <Content Include="Views\Movies\MovieForm.cshtml" />
+    <Content Include="Views\Series\SeriesForm.cshtml" />
+    <Content Include="Views\Movies\Details.cshtml" />
+    <Content Include="Views\Series\Details.cshtml" />
+    <Content Include="Views\UserProfile\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -275,6 +366,47 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201708210940118_AddingModelsToDb.resx">
+      <DependentUpon>201708210940118_AddingModelsToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708210953254_PopulationgGenresList.resx">
+      <DependentUpon>201708210953254_PopulationgGenresList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708211319183_PopulatingBooksTableToTests.resx">
+      <DependentUpon>201708211319183_PopulatingBooksTableToTests.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708211404164_ChangesInBookModel.resx">
+      <DependentUpon>201708211404164_ChangesInBookModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708212123135_PopulatingGamesTableToTests.resx">
+      <DependentUpon>201708212123135_PopulatingGamesTableToTests.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708221504469_changingBookModel.resx">
+      <DependentUpon>201708221504469_changingBookModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708221616176_changingOthersModel.resx">
+      <DependentUpon>201708221616176_changingOthersModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708221708250_changingOthersModel2.resx">
+      <DependentUpon>201708221708250_changingOthersModel2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708232224580_DeletingUserModel.resx">
+      <DependentUpon>201708232224580_DeletingUserModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708240956484_NewUsersDataManagementSystem.resx">
+      <DependentUpon>201708240956484_NewUsersDataManagementSystem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708241035279_TryingToUseUserIdAsaString.resx">
+      <DependentUpon>201708241035279_TryingToUseUserIdAsaString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708241502404_TryingToUseUserIdAsaString2.resx">
+      <DependentUpon>201708241502404_TryingToUseUserIdAsaString2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708251103241_AddUserIdToCreatedItems.resx">
+      <DependentUpon>201708251103241_AddUserIdToCreatedItems.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

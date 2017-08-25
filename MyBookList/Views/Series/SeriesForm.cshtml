@@ -1,0 +1,34 @@
+﻿@model MyBookList.ViewModels.SeriesFormViewModel
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>title</h2>
+
+@using (Html.BeginForm("Update", "Series"))
+{
+    @Html.ValidationSummary()
+    <div class="form-group">
+        @Html.LabelFor(m => m.Series.Title)
+        @Html.TextBoxFor(m => m.Series.Title, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Series.ReleaseDate)
+        @Html.TextBoxFor(m => m.Series.ReleaseDate, "{0}:d MMM yyyy", new { @class = "form-control" })
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.Series.NumberOfSeasons)
+        @Html.TextBoxFor(m => m.Series.NumberOfSeasons, new { @class = "form-control" })
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.Series.Description)
+        @Html.TextAreaFor(m => m.Series.Description, new { @class = "form-control" })
+    </div>
+
+    @Html.HiddenFor(m => m.Series.Id);
+    <button type="submit" class="btn btn-primary">Add a Series</button>
+}

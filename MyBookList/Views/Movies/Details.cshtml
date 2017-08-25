@@ -1,0 +1,15 @@
+﻿@model MyBookList.Models.Movie
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var user = Request.IsAuthenticated;
+}
+
+<h2>@Model.Title</h2>
+
+<li>@Model.Director</li>
+<li>@Model.ReleaseDate.ToShortDateString()</li>
+<li>@Model.MovieGenre.Name</li>
+<li>@Model.Description</li>

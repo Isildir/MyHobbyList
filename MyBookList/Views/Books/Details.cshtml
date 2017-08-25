@@ -1,0 +1,25 @@
+﻿@model MyBookList.Models.Book
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var user = Request.IsAuthenticated;
+}
+
+<h2>@Model.Title</h2>
+
+<li>@Model.Author</li>
+<li>@Model.ReleaseDate.ToShortDateString()</li>
+<li>@Model.BookGenre</li>
+<li>@Model.Description</li>
+
+<p>
+    @if (user)
+    {
+        @Html.ActionLink("Return", "Index", "Books", null, new {@class = "btn btn-primary"})
+    }else
+    {
+        @Html.ActionLink("Return", "Index", "Books", null, new {@class = "btn btn-primary"})
+    }
+</p>

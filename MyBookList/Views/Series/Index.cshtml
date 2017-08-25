@@ -1,0 +1,51 @@
+﻿@model IEnumerable<MyBookList.ViewModels.SeriesFormViewModel>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var user = Request.IsAuthenticated;
+}
+
+<h2>Series List</h2>
+
+<p>
+    @if (user) {@Html.ActionLink("Add new book", "New", "Series", null, new { @class = "btn btn-primary" })}
+</p>
+
+<table style="width: 100%" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Series Title</th>
+            @if (user)
+            {
+                <th></th>
+            }
+            <th>Release Date</th>
+            <th>Number of Seazons</th>
+            <th>Series Description</th>
+        </tr>
+    </thead>
+
+    @foreach (var series in Model)
+    {
+        <tr>
+            <th>@Html.ActionLink(series.Series.Title, "Details", "Series", new { id = series.Series.Id }, null)</th>
+            @if (user)
+            {
+                <th>@Html.ActionLink("Add to my Base", "AddToUserBase", "Series", new { id = series.Series.Id }, null)</th>
+            }
+            <th>@series.Series.ReleaseDate.ToShortDateString()</th>
+            <th>@series.Series.NumberOfSeasons</th>
+            <th>@series.Series.Description</th>
+            @if (series.CanEdit && user)
+            {
+                <th>@Html.ActionLink("Edit Series", "Edit", "Series", new { id = series.Series.Id }, null)</th>
+            }
+            @if (!series.InUse && user && series.CanEdit)
+            {
+                <th>@Html.ActionLink("Delete Series", "Edit", "Books", new { id = series.Series.Id }, null)</th>
+            }
+        </tr>
+    }
+</table>
