@@ -1,0 +1,21 @@
+﻿
+@model MyBookList.ViewModels.User.UserTicketViewModel
+
+@using (Html.BeginForm("SendTicket", "UserProfile"))
+{
+    @Html.ValidationSummary()
+    <div class="form-group">
+        @Html.LabelFor(m => m.TicketTitle)
+        @Html.TextBoxFor(m => m.TicketTitle, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.TicketBody)
+        @Html.TextAreaFor(m => m.TicketBody, new { @class = "form-control" })
+    </div>
+
+    <div style="text-align:right;">
+        <button type="submit" id="accountprofileedit-submit" name="accountprofileedit-submit" value="Edit Account" class="btn btn-primary" style="margin-left:5px;">Send Ticket</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+    </div>
+}

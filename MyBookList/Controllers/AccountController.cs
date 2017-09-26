@@ -156,6 +156,9 @@ namespace MyBookList.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    // Temp code 
+                    
+
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                     // Dodawanie nowych rol i przypisywanie

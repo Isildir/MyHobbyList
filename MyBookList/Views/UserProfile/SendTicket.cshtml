@@ -1,0 +1,28 @@
+﻿@model MyBookList.ViewModels.User.UserTicketViewModel
+@{
+    ViewBag.Title = "NewTicket";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>SendTicket</h2>
+
+
+@using (Html.BeginForm("SendTicket", "UserProfile"))
+{
+    @Html.ValidationSummary()
+    <div class="form-group">
+        @Html.LabelFor(m => m.TicketTitle)
+        @Html.TextBoxFor(m => m.TicketTitle, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.TicketBody)
+        @Html.TextAreaFor(m => m.TicketBody, new { @class = "form-control" })
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Send Ticket</button>
+}
+
+<p>
+    @Html.ActionLink("Return", "Index", "UserProfile", null, new { @class = "btn btn-primary" })
+</p>

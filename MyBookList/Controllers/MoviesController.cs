@@ -7,9 +7,13 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using MyBookList.Models;
 using MyBookList.ViewModels;
+using MyBookList.FunctionalClasses;
+using AutoMapper;
+using MyBookList.ViewModels.Movies;
 
 namespace MyBookList.Controllers
 {
+    [Authorize]
     public class MoviesController : Controller
     {
 
@@ -20,115 +24,218 @@ namespace MyBookList.Controllers
             _context = new ApplicationDbContext();
         }
         // GET: Movies
+        [AllowAnonymous]
         public ActionResult Index()
         {
-            var movies = _context.Movies.Include(m => m.MovieGenre).OrderBy(x => x.Title).ToList();
+            var movies = new List<Movie>();
 
-            var view = new List<MovieFormViewModel>();
+            movies = _context.Movies.Include(m => m.MovieGenre).OrderBy(x => x.AverageScore).ToList();
 
-            if (User.Identity.IsAuthenticated)
+            movies.Reverse();
+            
+            var currentUserId = User.Identity.GetUserId();
+
+            var view = new List<MovieIndexViewModel>();
+
+            foreach (var movie in movies)
             {
-                foreach (var movie in movies)
-                {
-                    view.Add(new MovieFormViewModel
-                    {
-                        Movie = movie,
-                        CanEdit = true ? movie.AddyeByUserId == User.Identity.GetUserId() : false,
-                        InUse = true ? _context.UserMoviesLists.Any(x => x.MovieId == movie.Id) : false
-                    });
-                }
-            }
-            else
-            {
-                foreach (var movie in movies)
-                {
-                    view.Add(new MovieFormViewModel
-                    {
-                        Movie = movie
-                    });
-                }
+                view.Add(Mapper.Map<Movie, MovieIndexViewModel>(movie));
             }
 
             return View(view);
         }
 
+        public ActionResult Delete(int id)
+        {
+            var movie = _context.Movies.Single(x => x.Id == id);
+
+            _context.Movies.Remove(movie);
+
+            _context.SaveChanges();
+
+            TempData.Add("success", "Movie Successfully Deleted");
+            return RedirectToAction("Index", "Movies");
+        }
+
+        [AllowAnonymous]
         public ActionResult Details(int id)
         {
+            var currentUserId = User.Identity.GetUserId();
+
             var movie = _context.Movies.Include(m => m.MovieGenre).SingleOrDefault(m => m.Id == id);
 
-            return View(movie);
+            var view = Mapper.Map<Movie, MovieDetailsViewModel>(movie);
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var score = _context.MovieScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.MovieId == movie.Id);
+
+                if (score != null)
+                {
+                    view.YourScore = score.Score;
+                }
+                else
+                {
+                    view.YourScore = 0;
+                }
+                view.CanEdit = true ? movie.AddedByUserId == currentUserId : false;
+                view.InUse = true ? _context.UserMoviesLists.Any(x => x.MovieId == movie.Id) : false;
+                view.IsAdded = true ? _context.UserMoviesLists.Any(x => x.MovieId == movie.Id && x.UserId == currentUserId) : false;
+            }
+
+            var totalMoviesNum = _context.Movies.Count(m => m.MovieGenreId == movie.MovieGenreId);
+
+            var totalThisAuthorMoviesNum = _context.Movies.Count(m => m.Director == movie.Director);
+
+            var SimiliarList = new List<SimiliarMovieMini>();
+
+            if (totalThisAuthorMoviesNum > 1 && totalMoviesNum > GlobalVariables.SimiliarListSize)
+            {
+                Random r = new Random();
+
+                var nextNum = r.Next(0, totalThisAuthorMoviesNum);
+
+                var items = _context.Movies.Where(m => m.Director == movie.Director).ToList();
+
+                var item = items.ElementAt(nextNum);
+
+                if (!SimiliarList.Exists(m => m.Title == item.Director))
+                {
+                    SimiliarList.Add(new SimiliarMovieMini()
+                    {
+                        Id = item.Id,
+                        Title = item.Title,
+                        ImageId = item.ImageId
+                    });
+                }
+            }
+
+            if (totalMoviesNum > GlobalVariables.SimiliarListSize)
+            {
+                while (SimiliarList.Count < GlobalVariables.SimiliarListSize)
+                {
+                    Random r = new Random();
+
+                    var nextNum = r.Next(0, totalMoviesNum);
+
+                    var items = _context.Movies.Where(m => m.MovieGenreId == movie.MovieGenreId).ToList();
+
+                    var item = items.ElementAt(nextNum);
+
+                    if (!SimiliarList.Exists(m => m.Title == item.Director))
+                    {
+                        SimiliarList.Add(new SimiliarMovieMini()
+                        {
+                            Id = item.Id,
+                            Title = item.Title,
+                            ImageId = item.ImageId
+                        });
+                    }
+                }
+            }
+
+            view.SimiliarMovies = SimiliarList;
+
+            return View(view);
         }
 
         public ActionResult New()
         {
-            var movieGenres = _context.MovieGenres.ToList();
-            var viewModel = new MovieFormViewModel()
+            var currentUser = User.Identity.GetUserName();
+
+            if (_context.BannedUsers.SingleOrDefault(m => m.UserId == currentUser) == null)
             {
-                Movie = new Movie(),
-                MovieGenre = movieGenres
-            };
+                var movieGenres = _context.MovieGenres.ToList();
+                var viewModel = new MovieFormViewModel()
+                {
+                    Id = 0
+                };
 
-            return View("MovieForm", viewModel);
-        }
-
-        [Authorize]
-        public ActionResult AddToUserBase(int id)
-        {
-            var currentUserId = User.Identity.GetUserId();
-
-            var movie = new UserMoviesList()
-            {
-                UserId = currentUserId,
-                MovieId = id
-            };
-
-            if (!_context.UserMoviesLists.Any(m => m.UserId == currentUserId && m.MovieId == id))
-            {
-                _context.UserMoviesLists.Add(movie);
-                _context.SaveChanges();
+                return PartialView("_MovieFormModal", viewModel);
             }
-
-            return RedirectToAction("Index", "Movies");
+            else
+            {
+                return RedirectToAction("Index", "UserProfile");
+            }
         }
 
         [HttpPost]
-        public ActionResult Update(Movie movie)
+        public ActionResult Update(MovieFormViewModel movieForm, HttpPostedFileBase UploadImage)
         {
             if (!ModelState.IsValid)
             {
-                var viewModel = new MovieFormViewModel()
-                {
-                    Movie = movie,
-                    MovieGenre = _context.MovieGenres.ToList()
-                };
-
-                return View("MovieForm", viewModel);
-
+                return PartialView("_MovieFormModal", movieForm);
             }
 
-            if (movie.Id == 0)
+            var imageHandler = new ImageHandler();
+
+            int imageId = imageHandler.AddImage(UploadImage);
+            
+            if (movieForm.Id == 0)
             {
                 var userId = User.Identity.GetUserId();
 
-                movie.AddyeByUserId = userId;
+                var movie = Mapper.Map<MovieFormViewModel, Movie>(movieForm);
 
+                movie.AddedByUserId = userId;
+                movie.ImageId = imageId;
+
+                TempData.Add("success", "Movie Successfully Added to base");
                 _context.Movies.Add(movie);
             }
             else
             {
-                var movieInDb = _context.Movies.Single(m => m.Id == movie.Id);
+                var movieInDb = _context.Movies.Single(m => m.Id == movieForm.Id);
 
-                movieInDb.Title = movie.Title;
-                movieInDb.Director = movie.Director;
-                movieInDb.ReleaseDate = movie.ReleaseDate;
-                movieInDb.Description = movie.Description;
-                movieInDb.MovieGenreId = movie.MovieGenreId;
+                movieInDb.Title = movieForm.Title;
+                movieInDb.Director = movieForm.Director;
+                movieInDb.ReleaseDate = movieForm.ReleaseDate;
+                movieInDb.Description = movieForm.Description;
+                movieInDb.MovieGenreId = movieForm.MovieGenreId;
+                if (movieInDb.ImageId == GlobalVariables.DefaultImageId)
+                {
+                    movieInDb.ImageId = imageId;
+                }
+                TempData.Add("success", "Movie Successfully Edited");
             }
 
 
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Movies");
+        }
+        
+        public EmptyResult AddScore(int id, short score)
+        {
+            var currentUserId = User.Identity.GetUserId();
+
+            var currentScore = _context.MovieScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.MovieId == id);
+
+            var movie = _context.Movies.Single(m => m.Id == id);
+
+            if (currentScore == null)
+            {
+                _context.MovieScoreLists.Add(new Models.User.MovieScoreList()
+                {
+                    MovieId = id,
+                    UserId = currentUserId,
+                    Score = score
+                });
+
+
+                movie.NumberOfVoters++;
+                movie.AverageScore = ((movie.AverageScore * (movie.NumberOfVoters - 1)) + score) / movie.NumberOfVoters;
+            }
+            else
+            {
+                movie.AverageScore = ((movie.AverageScore * movie.NumberOfVoters) + (score - currentScore.Score)) / movie.NumberOfVoters;
+
+                currentScore.Score = score;
+            }
+
+            _context.SaveChanges();
+
+            return new EmptyResult();
         }
 
         public ActionResult Edit(int id)
@@ -140,13 +247,9 @@ namespace MyBookList.Controllers
                 return HttpNotFound();
             }
 
-            var viewModel = new MovieFormViewModel()
-            {
-                Movie = movie,
-                MovieGenre = _context.MovieGenres.ToList()
-            };
-
-            return View("MovieForm", viewModel);
+            var viewModel = Mapper.Map<Movie, MovieFormViewModel>(movie);
+            
+            return PartialView("_MovieFormModal", viewModel);
         }
     }
 }

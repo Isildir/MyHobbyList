@@ -11,6 +11,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+                @if (this.User.IsInRole("Admin")) { <li>@Html.ActionLink("Admin Panel", "Index", "Admin")</li> }
                 <li>@Html.ActionLink("My List", "Index", "UserProfile")</li>
                 <li>@Html.ActionLink("Books List", "Index", "Books")</li>
                 <li>@Html.ActionLink("Movies List", "Index", "Movies")</li>

@@ -29,5 +29,8 @@ namespace MyBookList.Models
         public string Studio { get; set; }
         
         public string AddedByUserId { get; set; }
+
+        [Required]
+        public int ImageId { get; set; }
     }
 }

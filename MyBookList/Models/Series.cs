@@ -21,8 +21,16 @@ namespace MyBookList.Models
         [StringLength(255)]
         public string Description { get; set; }
         
+        [Required]
+        public int SeriesGenreId { get; set; }
+
+        public SeriesGenre SeriesGenre { get; set; }
+        
         public int NumberOfSeasons { get; set; }
         
         public string AddedByUserId { get; set; }
+
+        [Required]
+        public int ImageId { get; set; }
     }
 }

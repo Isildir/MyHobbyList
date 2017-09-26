@@ -31,6 +31,7 @@ textarea {
     border: 2px solid #ff0000;
 }
 
-.gray-button {
-    color: darkgray;
+.btn-primary{
+    padding: 5px;
+    margin: 5px;
 }

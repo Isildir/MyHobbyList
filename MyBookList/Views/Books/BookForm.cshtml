@@ -6,34 +6,41 @@
 
 <h2>title</h2>
 
-@using (Html.BeginForm("Update", "Books"))
+@using (Html.BeginForm("Update", "Books", FormMethod.Post, new { @enctype = "multipart/form-data" }))
 {
     @Html.ValidationSummary()
     <div class="form-group">
-        @Html.LabelFor(m => m.Book.Title)
-        @Html.TextBoxFor(m => m.Book.Title, new { @class = "form-control" })
+        @Html.LabelFor(m => m.Title)
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(m => m.Book.Author)
-        @Html.TextBoxFor(m => m.Book.Author, new { @class = "form-control" })
+        @Html.LabelFor(m => m.Author)
+        @Html.TextBoxFor(m => m.Author, new { @class = "form-control" })
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(m => m.Book.ReleaseDate)
-        @Html.TextBoxFor(m => m.Book.ReleaseDate,"{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.LabelFor(m => m.ReleaseDate)
+        @Html.TextBoxFor(m => m.ReleaseDate,"{0:d MMM yyyy}", new { @class = "form-control" })
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(m => m.Book.BookGenreId)
-        @Html.DropDownListFor(m => m.Book.BookGenreId, new SelectList(Model.BookGenres, "Id", "Name"), "Select Genre", new { @class = "form-control" })
+        @Html.LabelFor(m => m.BookGenreId)
+        @Html.DropDownListFor(m => m.BookGenreId, new SelectList(Model.BookGenres, "Id", "Name"), "Select Genre", new { @class = "form-control" })
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(m => m.Book.Description)
-        @Html.TextAreaFor(m => m.Book.Description, new { @class = "form-control" })
+        @Html.LabelFor(m => m.Description)
+        @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
     </div>
-    @Html.HiddenFor(m => m.Book.Id);
+
+    <div class="form-group">
+        @Html.Label("Image", new { @class = "form-control" })
+        <input type="file" name="UploadImage" class="input-files" />
+    </div>
+
+
+    @Html.HiddenFor(m => m.Id);
     <button type="submit" class="btn btn-primary">Save</button>
 }
 

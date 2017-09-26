@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using WebGrease.Activities;
 
 namespace MyBookList.Models
 {
@@ -35,5 +36,8 @@ namespace MyBookList.Models
         public string Description { get; set; }
 
         public string AddedByUserId { get; set; }
+
+        [Required]
+        public int ImageId { get; set; }
     }
 }

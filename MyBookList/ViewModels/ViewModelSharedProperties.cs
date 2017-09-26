@@ -10,5 +10,7 @@ namespace MyBookList.ViewModels
         public bool CanEdit { get; set; } = false;
 
         public bool InUse { get; set; } = false;
+
+        public bool IsAdded { get; set; } = true;
     }
 }

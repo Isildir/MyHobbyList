@@ -1,0 +1,86 @@
+﻿@model IEnumerable<MyBookList.ViewModels.AdminPanelBannedView>
+@{
+    ViewBag.Title = "BannedUsersList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<table style="width: 100%" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th colspan="2" style="width:100%;text-align:center; font-size:24px;">BannedUsersList</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            @foreach (var user in Model)
+            {
+                <th style="width:50%;font-size:16px;vertical-align:middle;">@user.UserId</th>
+                <th>@Html.ActionLink("Unban this user", "UnbanUserAddPrivilage", new { id = user.Id }, new { @class = "btn btn-primary" })</th>
+            }
+        </tr>
+    </tbody>
+</table>
+
+<button id="Send" type="button" class="btn btn-primary"> Ban User </button>
+
+<div class="modal fade" id="BanUser" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
+    <div class="modal-dialog modalAccountEdit" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3><strong>Enter User nick to ban him<span class="accountname"></span></strong></h3>
+            </div>
+
+            <div class="modal-body">
+                <div id="formContant">
+                    @Html.Partial("_BanUserModal")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @if (TempData.ContainsKey("success"))
+    {
+        <script>toastr.success("@TempData.SingleOrDefault(x => x.Key == "success").Value")</script>
+    }
+    else if (TempData.ContainsKey("fail"))
+    {
+        <script>toastr.error("@TempData.SingleOrDefault(x => x.Key == "fail").Value")</script>
+    }
+
+    <script>
+        $(document).ready(function () {
+
+
+            $('#BanUser').on('shown.bs.modal', function () {
+                $('#myInput').focus()
+            })
+
+            $("#Send").click(function () {
+                $("#BanUser").modal('show');
+            });
+
+            $("#BanUser").on("submit", "#form-bookformmodal", function (e) {
+                e.preventDefault();  // prevent standard form submission
+
+                var form = $(this);
+                $.ajax({
+                    url: form.attr("action"),
+                    method: form.attr("method"),  // post
+                    data: form.serialize(),
+                    success: function (partialResult) {
+                        $("#formContent").html(partialResult);
+                    }
+                });
+            });
+
+        });
+
+    </script>
+}
+
+
+

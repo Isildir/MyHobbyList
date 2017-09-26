@@ -8,12 +8,12 @@ namespace MyBookList.ViewModels
 {
     public class UserProfileViewModel
     {
-        public IEnumerable<Book> BooksList { get; set; }
+        public IEnumerable<BookIndexViewModel> BooksList { get; set; }
 
-        public IEnumerable<Movie> MoviesList { get; set; }
+        public IEnumerable<MovieIndexViewModel> MoviesList { get; set; }
 
-        public IEnumerable<Game> GamesList { get; set; }
+        public IEnumerable<GameIndexViewModel> GamesList { get; set; }
 
-        public IEnumerable<Series> SeriesList { get; set; }
+        public IEnumerable<SeriesIndexViewModel> SeriesList { get; set; }
     }
 }

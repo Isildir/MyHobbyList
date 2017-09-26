@@ -30,6 +30,9 @@ namespace MyBookList.Models
 
         public List<string> Actors { get; set; }
         
-        public string AddyeByUserId { get; set; }
+        public string AddedByUserId { get; set; }
+
+        [Required]
+        public int ImageId { get; set; }
     }
 }

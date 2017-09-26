@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using MyBookList.Models.User;
 
 namespace MyBookList.Models
 {
@@ -36,11 +37,20 @@ namespace MyBookList.Models
         public DbSet<BookGenre> BookGenres { get; set; }
         public DbSet<MovieGenre> MovieGenres { get; set; }
         public DbSet<GameGenre> GameGenres { get; set; }
+        public DbSet<SeriesGenre> SeriesGenres { get; set; }
+        public DbSet<Image> Images { get; set; }
+        public DbSet<Ticket> AdminTickets { get; set; }
+        public DbSet<BannedUser> BannedUsers { get; set; }
 
         public DbSet<UserBooksList> UserBooksLists { get; set; }
         public DbSet<UserMoviesList> UserMoviesLists { get; set; }
         public DbSet<UserGamesList> UserGamesLists { get; set; }
         public DbSet<UserSeriesList> UserSeriesLists { get; set; }
+
+        public DbSet<BookScoreList> BookScoreLists { get; set; }
+        public DbSet<MovieScoreList> MovieScoreLists { get; set; }
+        public DbSet<GameScoreList> GameScoreLists { get; set; }
+        public DbSet<SeriesScoreList> SeriesScoreLists { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

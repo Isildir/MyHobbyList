@@ -1,0 +1,46 @@
+﻿@model IEnumerable<MyBookList.ViewModels.AdminPanelIndexView>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+  
+
+<table style="width: 100%" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th colspan="3" style="width:100%;text-align:center; font-size:24px;">Ticket List</th>
+        </tr>
+        <tr>
+            <th style="width:33.3%;text-align:center; font-size:18px;">Ticket Title</th>
+            <th style="width:33.3%;text-align:center; font-size:18px;">Time Send</th>
+            <th style="text-align:center; font-size:18px;">From</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            @foreach (var item in Model)
+            {
+                <td style="font-size:14px;">@Html.ActionLink(item.TicketTitle, "TicketDetails", "Admin", new { id = item.Id }, null)</td>
+                <td style="font-size:14px;">@item.TimeSend</td>
+                <td style="font-size:14px;">@item.SendingUserName</td>
+            }
+        </tr>
+    </tbody>
+</table>
+
+
+@Html.ActionLink("Banned Users List", "BannedUsersList", "Admin", null, new { @class = "btn btn-primary" })
+
+@section scripts
+{
+    @if (TempData.ContainsKey("success"))
+    {
+        <script>toastr.success("@TempData.SingleOrDefault(x => x.Key == "success").Value")</script>
+    }
+    else if (TempData.ContainsKey("fail"))
+    {
+        <script>toastr.success("@TempData.SingleOrDefault(x => x.Key == "fail").Value")</script>
+    }
+}

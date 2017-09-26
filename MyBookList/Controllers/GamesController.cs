@@ -7,9 +7,13 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using MyBookList.Models;
 using MyBookList.ViewModels;
+using MyBookList.FunctionalClasses;
+using AutoMapper;
+using MyBookList.ViewModels.Games;
 
 namespace MyBookList.Controllers
 {
+    [Authorize]
     public class GamesController : Controller
     {
 
@@ -20,116 +24,219 @@ namespace MyBookList.Controllers
             _context = new ApplicationDbContext();
         }
         // GET: Games
+        [AllowAnonymous]
         public ActionResult Index()
         {
-            var games = _context.Games.Include(m => m.GameGenre).OrderBy(x => x.Title).ToList();
+            var games = new List<Game>();
 
-            var view = new List<GameFormViewModel>();
+            games = _context.Games.Include(m => m.GameGenre).OrderBy(x => x.AverageScore).ToList();
+
+            games.Reverse();
             
-            if (User.Identity.IsAuthenticated)
+            var currentUserId = User.Identity.GetUserId();
+
+            var view = new List<GameIndexViewModel>();
+
+            foreach (var game in games)
             {
-                foreach (var game in games)
-                {
-                    view.Add(new GameFormViewModel
-                    {
-                        Game = game,
-                        CanEdit = true ? game.AddedByUserId == User.Identity.GetUserId() : false,
-                        InUse = true ? _context.UserGamesLists.Any(x => x.GameId == game.Id) : false
-                    });
-                }
-            }
-            else
-            {
-                foreach (var game in games)
-                {
-                    view.Add(new GameFormViewModel
-                    {
-                        Game = game
-                    });
-                }
+                view.Add(Mapper.Map<Game, GameIndexViewModel>(game));
             }
 
             return View(view);
         }
 
+        [AllowAnonymous]
         public ActionResult Details(int id)
-        {
-            var game = _context.Games.Include(m => m.GameGenre).SingleOrDefault(m => m.Id == id);
-
-            return View(game);
-        }
-
-        [Authorize]
-        public ActionResult AddToUserBase(int id)
         {
             var currentUserId = User.Identity.GetUserId();
 
-            var game = new UserGamesList()
-            {
-                UserId = currentUserId,
-                GameId = id
-            };
+            var game = _context.Games.Include(m => m.GameGenre).SingleOrDefault(m => m.Id == id);
 
-            if (!_context.UserGamesLists.Any(m => m.UserId == currentUserId && m.GameId == id))
+            var view = Mapper.Map<Game, GamesDetailsViewModel>(game);
+
+            if (User.Identity.IsAuthenticated)
             {
-                _context.UserGamesLists.Add(game);
-                _context.SaveChanges();
+                var score = _context.GameScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.GameId == game.Id);
+
+                if (score != null)
+                {
+                    view.YourScore = score.Score;
+                }
+                else
+                {
+                    view.YourScore = 0;
+                }
+                view.CanEdit = true ? game.AddedByUserId == currentUserId : false;
+                view.InUse = true ? _context.UserGamesLists.Any(x => x.GameId == game.Id) : false;
+                view.IsAdded = true ? _context.UserGamesLists.Any(x => x.GameId == game.Id && x.UserId == currentUserId) : false;
             }
 
-            return RedirectToAction("Index", "Games");
+            var totalGamesNum = _context.Games.Count(m => m.GameGenreId == game.GameGenreId);
+
+            var totalThisAuthorGamesNum = _context.Games.Count(m => m.Studio == game.Studio);
+
+            var SimiliarList = new List<SimiliarGameMini>();
+
+            if (totalThisAuthorGamesNum > 1 && totalGamesNum > GlobalVariables.SimiliarListSize)
+            {
+                Random r = new Random();
+
+                var nextNum = r.Next(0, totalThisAuthorGamesNum);
+
+                var items = _context.Games.Where(m => m.Studio == game.Studio).ToList();
+
+                var item = items.ElementAt(nextNum);
+
+                if (!SimiliarList.Exists(m => m.Title == item.Studio))
+                {
+                    SimiliarList.Add(new SimiliarGameMini()
+                    {
+                        Id = item.Id,
+                        Title = item.Title,
+                        ImageId = item.ImageId
+                    });
+                }
+            }
+
+            if (totalGamesNum > GlobalVariables.SimiliarListSize)
+            {
+                while (SimiliarList.Count < GlobalVariables.SimiliarListSize)
+                {
+                    Random r = new Random();
+
+                    var nextNum = r.Next(0, totalGamesNum);
+
+                    var items = _context.Games.Where(m => m.GameGenreId == game.GameGenreId).ToList();
+
+                    var item = items.ElementAt(nextNum);
+
+                    if (!SimiliarList.Exists(m => m.Title == item.Studio))
+                    {
+                        SimiliarList.Add(new SimiliarGameMini()
+                        {
+                            Id = item.Id,
+                            Title = item.Title,
+                            ImageId = item.ImageId
+                        });
+                    }
+                }
+            }
+
+            view.SimiliarGames = SimiliarList;
+
+            return View(view);
         }
 
+        public ActionResult Delete(int id)
+        {
+            var game = _context.Games.Single(x => x.Id == id);
 
+            _context.Games.Remove(game);
+
+            _context.SaveChanges();
+
+            TempData.Add("success", "Game Successfully Deleted");
+            return RedirectToAction("Index", "Games");
+        }
+        
         public ActionResult New()
         {
-            var gameGenres = _context.GameGenres.ToList();
-            var viewModel = new GameFormViewModel()
-            {
-                Game = new Game(),
-                GameGenre = gameGenres
-            };
+            var currentUser = User.Identity.GetUserName();
 
-            return View("GameForm", viewModel);
+            if (_context.BannedUsers.SingleOrDefault(m => m.UserId == currentUser) == null)
+            {
+                var gameGenres = _context.GameGenres.ToList();
+                var viewModel = new GameFormViewModel()
+                {
+                    Id = 0
+                };
+
+                return PartialView("_GameFormModal", viewModel);
+            }
+            else
+            {
+                return RedirectToAction("Index", "UserProfile");
+            }
         }
 
         [HttpPost]
-        public ActionResult Update(Game game)
+        public ActionResult Update(GameFormViewModel gameForm, HttpPostedFileBase UploadImage)
         {
             if (!ModelState.IsValid)
             {
-                var viewModel = new GameFormViewModel()
-                {
-                    Game = game,
-                    GameGenre = _context.GameGenres.ToList()
-                };
-
-                return View("GameForm", viewModel);
-
+                return PartialView("_GameFormModal", gameForm);
             }
 
-            if (game.Id == 0)
+            var imageHandler = new ImageHandler();
+
+            int imageId = imageHandler.AddImage(UploadImage);
+
+            if (gameForm.Id == 0)
             {
                 var userId = User.Identity.GetUserId();
 
+                var game = Mapper.Map<GameFormViewModel, Game>(gameForm);
+
                 game.AddedByUserId = userId;
+                game.ImageId = imageId;
+
+                TempData.Add("success", "Game Successfully Added To Base");
 
                 _context.Games.Add(game);
             }
             else
             {
-                var gameInDb = _context.Games.Single(m => m.Id == game.Id);
+                var gameInDb = _context.Games.Single(m => m.Id == gameForm.Id);
 
-                gameInDb.Title = game.Title;
-                gameInDb.Studio = game.Studio;
-                gameInDb.ReleaseDate = game.ReleaseDate;
-                gameInDb.Description = game.Description;
-                gameInDb.GameGenreId = game.GameGenreId;
+                gameInDb.Title = gameForm.Title;
+                gameInDb.Studio = gameForm.Studio;
+                gameInDb.ReleaseDate = gameForm.ReleaseDate;
+                gameInDb.Description = gameForm.Description;
+                gameInDb.GameGenreId = gameForm.GameGenreId;
+                if (gameInDb.ImageId == GlobalVariables.DefaultImageId)
+                {
+                    gameInDb.ImageId = imageId;
+                }
+                TempData.Add("success", "Game Successfully Updated");
             }
-
 
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Games");
+            return RedirectToAction("Index", "UserProfile");
+        }
+
+
+        public EmptyResult AddScore(int id, short score)
+        {
+            var currentUserId = User.Identity.GetUserId();
+
+            var currentScore = _context.GameScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.GameId == id);
+
+            var game = _context.Games.Single(m => m.Id == id);
+
+            if (currentScore == null)
+            {
+                _context.GameScoreLists.Add(new Models.User.GameScoreList()
+                {
+                    GameId = id,
+                    UserId = currentUserId,
+                    Score = score
+                });
+
+
+                game.NumberOfVoters++;
+                game.AverageScore = ((game.AverageScore * (game.NumberOfVoters - 1)) + score) / game.NumberOfVoters;
+            }
+            else
+            {
+                game.AverageScore = ((game.AverageScore * game.NumberOfVoters) + (score - currentScore.Score)) / game.NumberOfVoters;
+
+                currentScore.Score = score;
+            }
+
+            _context.SaveChanges();
+
+            return new EmptyResult();
         }
 
         public ActionResult Edit(int id)
@@ -141,13 +248,12 @@ namespace MyBookList.Controllers
                 return HttpNotFound();
             }
 
-            var viewModel = new GameFormViewModel()
-            {
-                Game = game,
-                GameGenre = _context.GameGenres.ToList()
-            };
-
-            return View("GameForm", viewModel);
+            var viewModel = Mapper.Map<Game, GameFormViewModel>(game);
+            
+            return PartialView("_GameFormModal", viewModel);
         }
     }
 }
+
+
+                
