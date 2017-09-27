@@ -401,6 +401,7 @@
     <Content Include="Content\bootstrap-slate.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\redstar.png" />
     <Content Include="Content\DataTables\css\autoFill.bootstrap.css" />
     <Content Include="Content\DataTables\css\autoFill.bootstrap.min.css" />
     <Content Include="Content\DataTables\css\autoFill.dataTables.css" />
@@ -510,11 +511,10 @@
     <Content Include="Content\DataTables\swf\flashExport.swf" />
     <Content Include="Content\default.jpg" />
     <Content Include="Content\demos.css" />
-    <Content Include="Content\goldstar.png" />
-    <Content Include="Content\graystar.png" />
     <Content Include="Content\jquery.Jcrop.css" />
     <Content Include="Content\main.css" />
     <Content Include="Content\styles\MainPage.css" />
+    <Content Include="Content\graystar.png" />
     <Content Include="Content\WithBook.png" />
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.min.css" />

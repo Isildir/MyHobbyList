@@ -176,7 +176,12 @@ namespace MyBookList.Controllers
 
         [HttpPost]
         public ActionResult Update(BookFormViewModel bookForm, HttpPostedFileBase UploadImage)
-        {            
+        {
+            if (!System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                return new HttpNotFoundResult();
+            }
+
             if (!ModelState.IsValid)
             {
                 return PartialView("_BookFormModal", bookForm);
@@ -261,6 +266,7 @@ namespace MyBookList.Controllers
             return new EmptyResult();
         }
         
+        [AllowAnonymous]
         public ActionResult Edit(int id)
         {
             var book = _context.Books.SingleOrDefault(m => m.Id == id);

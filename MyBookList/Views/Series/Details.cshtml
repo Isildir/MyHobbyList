@@ -29,20 +29,23 @@
                 {
                     <p style="padding:40px 10px;">@Model.Description</p>
                 }
-                <ul style="list-style:none;display: inline-flex;transform:translateX(-50%);position:absolute;bottom:5px;padding:10px;">
-                    @for (var i = 1; i <= 10; i++)
-                    {
-                        var num = "" + i;
-                        if (Model.YourScore >= i)
+                @if (user)
+                {
+                    <ul style="list-style:none;display: inline-flex;transform:translateX(-50%);position:absolute;bottom:5px;padding:10px;">
+                        @for (var i = 1; i <= 10; i++)
                         {
-                            <li><img id="@num" src="~/Content/goldstar.png" style="float:left;width:20px;height:20px;cursor:pointer" /></li>
+                            var num = "" + i;
+                            if (Model.YourScore >= i)
+                            {
+                                <li><img id="@num" src="~/Content/redstar.png" style="float:left;width:20px;height:20px;cursor:pointer" /></li>
+                            }
+                            else
+                            {
+                                <li><img id="@num" src="~/Content/graystar.png" style="float:left;width:20px;height:20px;cursor:pointer" /></li>
+                            }
                         }
-                        else
-                        {
-                            <li><img id="@num" src="~/Content/graystar.png" style="float:left;width:20px;height:20px;cursor:pointer" /></li>
-                        }
-                    }
-                </ul>
+                    </ul>
+                }
             </td>
         </tr>
     </tbody>
@@ -66,7 +69,10 @@
             {
             <th>@Html.ActionLink("Delete this Series", "Delete", null, new { id = Model.Id }, new { @class = "btn btn-primary" })</th>
         }
-        <th><button id="RecBook" type="button" class="btn btn-primary">Recommend</button></th>
+        @if (user)
+        {
+            <th><button id="RecBook" type="button" class="btn btn-primary">Recommend</button></th>
+        }
     </tr>
 </table>
 
@@ -173,25 +179,53 @@
                 var number = parseInt(event.target.id);
 
                 $.ajax({
-                    url:'@Url.Action("AddScore", "Series")', // comma here instead of semicolon
+                    url:'@Url.Action("AddScore", "Books")', // comma here instead of semicolon
                     data: { id: @Model.Id, score: number },
-                success: function ()
-                {
-                    for (var i = 1; i <= 10 ;i++)
+                    success: function ()
                     {
-                        if (i <= number)
+                        currScore = number;
+
+                        for (var i = 1; i <= 10 ;i++)
                         {
-                            $("#" + i).attr('src', '/Content/goldstar.png');
-                        }
-                        else
-                        {
-                            $("#" + i).attr('src', '/Content/graystar.png');
+                            if (i <= number)
+                            {
+                                $("#" + i).attr('src', '/Content/redstar.png');
+                            }
+                            else
+                            {
+                                $("#" + i).attr('src', '/Content/graystar.png');
+                            }
                         }
                     }
-
-                }, false: function () { alert("dupa"); }
+                });
             });
 
+            $("#1,#2,#3,#4,#5,#6,#7,#8,#9,#10").hover(function (e) {
+
+                var number = parseInt(event.target.id);
+
+                for (var i = 1; i <= 10; i++) {
+                    if (i <= number) {
+                        $("#" + i).attr('src', '/Content/redstar.png');
+                    }
+                    else {
+                        $("#" + i).attr('src', '/Content/graystar.png');
+                    }
+                }
+            });
+
+            $("#1,#2,#3,#4,#5,#6,#7,#8,#9,#10").mouseleave(function (e) {
+
+                var number = currScore;
+
+                for (var i = 1; i <= 10; i++) {
+                    if (i <= number) {
+                        $("#" + i).attr('src', '/Content/redstar.png');
+                    }
+                    else {
+                        $("#" + i).attr('src', '/Content/graystar.png');
+                    }
+                }
             });
         });
     </script>

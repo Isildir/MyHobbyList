@@ -162,6 +162,11 @@ namespace MyBookList.Controllers
         [HttpPost]
         public ActionResult Update(SeriesFormViewModel seriesForm, HttpPostedFileBase UploadImage)
         {
+            if (!System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                return new HttpNotFoundResult();
+            }
+
             if (!ModelState.IsValid)
             {
                 return PartialView("_SeriesFormModal", seriesForm);
@@ -238,6 +243,7 @@ namespace MyBookList.Controllers
             return new EmptyResult();
         }
 
+        [AllowAnonymous]
         public ActionResult Edit(int id)
         {
             var series = _context.Series.SingleOrDefault(m => m.Id == id);

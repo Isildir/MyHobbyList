@@ -162,6 +162,11 @@ namespace MyBookList.Controllers
         [HttpPost]
         public ActionResult Update(GameFormViewModel gameForm, HttpPostedFileBase UploadImage)
         {
+            if (!System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                return new HttpNotFoundResult();
+            }
+
             if (!ModelState.IsValid)
             {
                 return PartialView("_GameFormModal", gameForm);
@@ -239,6 +244,7 @@ namespace MyBookList.Controllers
             return new EmptyResult();
         }
 
+        [AllowAnonymous]
         public ActionResult Edit(int id)
         {
             var game = _context.Games.SingleOrDefault(m => m.Id == id);
