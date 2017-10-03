@@ -10,6 +10,9 @@ using MyBookList.ViewModels;
 using MyBookList.FunctionalClasses;
 using AutoMapper;
 using MyBookList.ViewModels.Games;
+using MyHobbyList.ViewModels.User;
+using MyHobbyList.Models.Games;
+using MyBookList.Models.Games;
 
 namespace MyBookList.Controllers
 {
@@ -56,7 +59,7 @@ namespace MyBookList.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                var score = _context.GameScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.GameId == game.Id);
+                var score = game.GameScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.GameId == game.Id);
 
                 if (score != null)
                 {
@@ -121,6 +124,34 @@ namespace MyBookList.Controllers
                     }
                 }
             }
+            
+            //comments
+            var comments = new List<CommentViewModel>();
+
+            var DbComments = game.GameComments;
+
+            foreach (var item in DbComments)
+            {
+                var namesModel = item.GameLikedBy.ToList();
+
+                var names = new List<string>();
+
+                foreach (var element in namesModel)
+                {
+                    names.Add(element.Name);
+                }
+
+                comments.Add(new CommentViewModel()
+                {
+                    Id = item.Id,
+                    CommentData = item.CommentData,
+                    UserId = item.UserId,
+                    DateAdded = item.DateAdded,
+                    LikeUserNames = names
+                });
+            }
+
+            view.comments = comments;
 
             view.SimiliarGames = SimiliarList;
 
@@ -148,7 +179,8 @@ namespace MyBookList.Controllers
                 var gameGenres = _context.GameGenres.ToList();
                 var viewModel = new GameFormViewModel()
                 {
-                    Id = 0
+                    Id = 0,
+                    GameGenres = gameGenres
                 };
 
                 return PartialView("_GameFormModal", viewModel);
@@ -158,7 +190,7 @@ namespace MyBookList.Controllers
                 return RedirectToAction("Index", "UserProfile");
             }
         }
-
+        
         [HttpPost]
         public ActionResult Update(GameFormViewModel gameForm, HttpPostedFileBase UploadImage)
         {
@@ -184,6 +216,8 @@ namespace MyBookList.Controllers
 
                 game.AddedByUserId = userId;
                 game.ImageId = imageId;
+                game.GameComments = new List<GameComment>();
+                game.GameScoreLists = new List<GameScoreList>();
 
                 TempData.Add("success", "Game Successfully Added To Base");
 
@@ -211,17 +245,34 @@ namespace MyBookList.Controllers
         }
 
 
+        [AllowAnonymous]
+        public ActionResult Edit(int id)
+        {
+            var game = _context.Games.SingleOrDefault(m => m.Id == id);
+
+            if (game == null)
+            {
+                return HttpNotFound();
+            }
+
+            var viewModel = Mapper.Map<Game, GameFormViewModel>(game);
+
+            viewModel.GameGenres = _context.GameGenres.ToList();
+            
+            return PartialView("_GameFormModal", viewModel);
+        }
+
         public EmptyResult AddScore(int id, short score)
         {
             var currentUserId = User.Identity.GetUserId();
 
-            var currentScore = _context.GameScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.GameId == id);
-
             var game = _context.Games.Single(m => m.Id == id);
 
+            var currentScore = game.GameScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.GameId == id);
+            
             if (currentScore == null)
             {
-                _context.GameScoreLists.Add(new Models.User.GameScoreList()
+                game.GameScoreLists.Add(new GameScoreList()
                 {
                     GameId = id,
                     UserId = currentUserId,
@@ -244,19 +295,61 @@ namespace MyBookList.Controllers
             return new EmptyResult();
         }
 
-        [AllowAnonymous]
-        public ActionResult Edit(int id)
+        public ActionResult AddComment(int id, string CommentData)
+        {
+            if (String.IsNullOrWhiteSpace(CommentData))
+            {
+                TempData.Add("fail", "You need to write something...");
+
+                return RedirectToAction("Details/" + id, "Games");
+            }
+            else if (_context.Games.SingleOrDefault(x => x.Id == id) == null)
+            {
+                TempData.Add("fail", "No book with this id");
+
+                return RedirectToAction("Details/" + id, "Games");
+            }
+            else
+            {
+                var comment = new GameComment()
+                {
+                    GameId = id,
+                    CommentData = CommentData,
+                    UserId = User.Identity.GetUserName(),
+                    DateAdded = DateTime.Now,
+                    GameLikedBy = new List<GameLikedBy>()
+                };
+
+                _context.Games.Single(x => x.Id == id).GameComments.Add(comment);
+
+                _context.SaveChanges();
+
+                TempData.Add("success", "Your comment was added");
+
+                return RedirectToAction("Details/" + id, "Games");
+            }
+        }
+
+        public ActionResult LikeComment(int id, int commentId)
         {
             var game = _context.Games.SingleOrDefault(m => m.Id == id);
 
-            if (game == null)
+            if (game == null) { return new HttpNotFoundResult(); }
+
+            var comment = game.GameComments.SingleOrDefault(m => m.Id == commentId);
+
+            if (comment == null) { return new HttpNotFoundResult(); }
+
+            var user = User.Identity.GetUserName();
+
+            if (comment.GameLikedBy.SingleOrDefault(m => m.Name == user) == null)
             {
-                return HttpNotFound();
+                comment.GameLikedBy.Add(new GameLikedBy() { Name = user });
             }
 
-            var viewModel = Mapper.Map<Game, GameFormViewModel>(game);
-            
-            return PartialView("_GameFormModal", viewModel);
+            _context.SaveChanges();
+
+            return RedirectToAction("Details/" + id, "Games");
         }
     }
 }

@@ -12,7 +12,7 @@
 
     <div class="form-group">
         @Html.LabelFor(m => m.ReleaseDate)
-        @Html.TextBoxFor(m => m.ReleaseDate, "{0}:d MMM yyyy", new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.ReleaseDate, "{0:d MMM yyyy}", new { @class = "form-control" })
     </div>
 
     <div class="form-group">
@@ -31,45 +31,23 @@
     </div>
 
     <div class="form-group">
-        @Html.Label("Image", new { @class = "form-control" })
-        <input type="file" name="UploadImage" class="input-files" id="imgInp" />
-        @if (Model.ImageId == 8 || Model.ImageId == 0)
-        {
-            <img id="image1" src="~/Content/default.jpg" alt="your image" style="width: 210px;height:300px" />
-            <img id="image2" src="~/Content/default.jpg" alt="your image" style="width: 70px;height:100px" />
-        }
-        else
-        {
-            <img id="image3" src='@Url.Action("ShowFull", "Image", new { id = Model.ImageId})' style="width: 210px;height:300px" />
-            <img id="image4" src='@Url.Action("ShowMini", "Image", new { id = Model.ImageId})' style="width: 70px;height:100px" />
-        }
+        <label for="imgInp2" class="label-for-input">Choose a file</label>
+        <div id="gameImages">
+            <input type="file" name="UploadImage" class="input-files" id="imgInp2" />
+            @if (Model.ImageId == 8 || Model.ImageId == 0)
+            {
+                <img id="image1" src="~/Content/Images/default.jpg" alt="your image" style="width: 210px;height:300px" />
+            }
+            else
+            {
+                <img id="image2" src='@Url.Action("ShowFull", "Image", new { id = Model.ImageId})' style="width: 210px;height:300px" />
+            }
+        </div>
     </div>
 
     @Html.HiddenFor(m => m.Id);
     <div style="text-align:right;">
-        <button type="submit" id="accountprofileedit-submit" name="accountprofileedit-submit" value="Edit Account" class="btn btn-primary" style="margin-left:5px;">Save</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+        <button type="submit" id="accountprofileedit-submit" name="accountprofileedit-submit" value="Edit Account" class="button-for-modal" style="margin-left:5px;">Save</button>
+        <button type="button" class="button-for-modal" data-dismiss="modal">Cancel</button>
     </div>
 }
-
-<script>
-    function readURL(input) {
-
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#image1').attr('src', e.target.result);
-                $('#image2').attr('src', e.target.result);
-                $('#image3').attr('src', e.target.result);
-                $('#image4').attr('src', e.target.result);
-            }
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    $("#imgInp").change(function () {
-        readURL(this);
-    });
-</script>

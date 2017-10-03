@@ -12,6 +12,8 @@
     var anySeriesRec = false;
 }
 
+<link rel="stylesheet" type="text/css" href="~/Content/styles/Modals.css" />
+
 @if (Model.BooksList.Any())
 {
     <h2 style="width:100%;text-align:center;">My Books</h2>
@@ -398,7 +400,25 @@
                     }
                 });
             });
+        });
+        
+        function readURL(input,targetId) {
 
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#' + targetId + ' #image1').attr('src', e.target.result);
+                    $('#' + targetId + ' #image2').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imgInp1,#imgInp2,#imgInp3,#imgInp4").change(function () {
+            var id = $(event.target).parent().attr("id");
+            readURL(this,id);
         });
 
     </script>

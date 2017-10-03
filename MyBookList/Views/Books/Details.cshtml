@@ -7,41 +7,44 @@
     var user = Request.IsAuthenticated;
 
     var admin = this.User.IsInRole("Admin");
-}
+} 
 
-<table style="width:100%">
+<link rel="stylesheet" type="text/css" href="~/Content/styles/DetailsPage.css" />
+<link rel="stylesheet" type="text/css" href="~/Content/styles/Modals.css" />
+
+<table id="table-main">
     <tbody>
-        <tr height:300px>
-            <td style="width:210px">
-                <img id="image" src='@Url.Action("ShowFull", "Image", new { id = Model.ImageId})' height="300" width="210" />
+        <tr>
+            <td id="first-col">
+                <img src='@Url.Action("ShowFull", "Image", new { id = Model.ImageId})' />
             </td>
             <td>
-                <ul style="list-style:none;">
-                    <li style="font-size:24px;position: relative;text-align:center; font-style:italic; padding-bottom: 30px;">@Model.Title</li>
-                    <li style="margin: 10px 0 10px 50px;"><p style="display: inline; margin-right: 10px;">Author:</p>@Model.Author</li>
-                    <li style="margin: 10px 0 10px 50px;"><p style="display: inline; margin-right: 10px;">Genre:</p>@Model.BookGenre.Name</li>
-                    <li style="margin: 10px 0 10px 50px;"><p style="display: inline; margin-right: 10px;">Release Date:</p>@Model.ReleaseDate.Day/@Model.ReleaseDate.Month/@Model.ReleaseDate.Year</li>
+                <ul id="data-list">
+                    <li id="title">@Model.Title</li>
+                    <li><p>Author:</p>@Model.Author</li>
+                    <li><p>Genre:</p>@Model.BookGenre.Name</li>
+                    <li><p>Release Date:</p>@Model.ReleaseDate.Day/@Model.ReleaseDate.Month/@Model.ReleaseDate.Year</li>
                 </ul>
             </td>
-            <td style="width:60%;text-align:center;position:relative;top:10px;">
-                <p style="font-size:18px;padding:10px 5px 5px 5px;margin:0;position:absolute;top:2px;left:50%;transform:translateX(-50%);">Description:</p>
+            <td id="desc-col">
+                <p>Description:</p>
                 @if (!String.IsNullOrWhiteSpace(Model.Description))
                 {
-                    <p style="padding:40px 10px;">@Model.Description</p>
+                    <p>@Model.Description</p>
                 }
                 @if (user)
                 {
-                    <ul style="list-style:none;display: inline-flex;transform:translateX(-50%);position:absolute;bottom:5px;padding:10px;">
+                    <ul>
                         @for (var i = 1; i <= 10; i++)
                         {
                             var num = "" + i;
                             if (Model.YourScore >= i)
                             {
-                                <li><img id="@num" src="~/Content/redstar.png" style="float:left;width:20px;height:20px;cursor:pointer" /></li>
+                                <li><img id="@num" src="~/Content/Images/redstar.png" /></li>
                             }
                             else
                             {
-                                <li><img id="@num" src="~/Content/graystar.png" style="float:left;width:20px;height:20px;cursor:pointer" /></li>
+                                <li><img id="@num" src="~/Content/Images/graystar.png" /></li>
                             }
                         }
                     </ul>
@@ -51,7 +54,7 @@
     </tbody>
 </table>
 
-<table style="background-color:#272b30">
+<table id="button-table">
     <tr>
         @if (user && !Model.IsAdded)
         {
@@ -59,7 +62,7 @@
         }
         else if (user)
         {
-            <th style="color: lightgray" class = "btn btn-primary">Already Added</th>
+            <th id="button-unactive" class = "btn btn-primary">Already Added</th>
         }
         @if ((Model.CanEdit && user) || admin)
         {
@@ -76,57 +79,107 @@
     </tr>
 </table>
 
+<style>
+    #like {
+        background-color: transparent;
+        float: right;
+        margin-bottom: 10px;
+        border: none;
+        margin-top: 3px;
+    }
+
+    .like_it:hover {
+        border: 1px solid white;
+        border-radius: 15px;
+    }
+
+</style>
+
+
+@if(Model.comments != null)
+{
+    <div id="comment-div">
+        @foreach (var item in Model.comments)
+        {
+            <div id="comment-desc">
+                <p>"@item.CommentData"</p>
+                <div id="comment-user-data">
+                    <p>@item.UserId</p>
+                    @foreach(var element in @item.LikeUserNames)
+                    {
+                        <p>@element</p>
+                    }
+                    <p>@item.DateAdded.Day/@item.DateAdded.Month/@item.DateAdded.Year</p>
+                </div>
+            </div>
+            <div class="like_it" style="border:1px solid white;">
+                <i class="glyphicon glyphicon-thumbs-up" style="font-size:20px; float: right;color:lightblue;text-shadow:2px 2px 4px #000000;"></i>
+                <button id="like">I Like It!</button>
+            </div>
+        }
+    </div>
+}
+
+<h2> Leave your comment</h2>
+
+@using (Html.BeginForm("AddComment", "Books"))
+{
+    @Html.ValidationSummary()
+    <div>
+        @Html.TextArea("CommentData", null, new { @class = "comment-area" })
+    </div>
+
+    @Html.Hidden("id", new { id = Model.Id });
+
+    <button id="comment-submit" type="submit">Send</button>
+} 
+
 @if (Model.SimiliarBooks.Count() >= 6)
 {
-    <h2 style="width:100%;font-size:24px;text-align:center">Similiar Books</h2>
-    <div class="row" style="width:100%;text-align:center;margin:0 auto;">
+    <h2>Similiar Books</h2>
+    <div id="similiar" class="row" >
         @foreach (var item in Model.SimiliarBooks)
         {
             <div class="col-sm-2">
-                <img id="image" src='@Url.Action("ShowFull", "Image", new { id = item.ImageId })' height="200" width="140" />
+                <img src='@Url.Action("ShowFull", "Image", new { id = item.ImageId })' />
                 @Html.ActionLink(item.Title, "Details", "Books", new { id = item.Id }, null)
             </div>
         }
     </div>
 }
 
-
-<div class="modal fade" id="AccountEditModal" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
-    <div class="modal-dialog modalAccountEdit" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3><strong>Edit this book<span class="accountname"></span></strong></h3>
-            </div>
-
-            <div class="modal-body">
-
-                <div class="modal-body" id="form-container">
-                    @Html.Action("Edit", "Books", new { id = Model.Id })
+@if (user) {
+    <div class="modal fade" id="AccountEditModal" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
+        <div class="modal-dialog modalAccountEdit" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3><strong>Edit this book<span class="accountname"></span></strong></h3>
                 </div>
+
+                    <div class="modal-body" id="form-container">
+                        @Html.Action("Edit", "Books", new { id = Model.Id })
+                    </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<div class="modal fade" id="SendRecommend" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
-    <div class="modal-dialog modalAccountEdit" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3><strong>Enter your friend nick<span class="accountname"></span></strong></h3>
-            </div>
-
-            <div class="modal-body">
-
-                <div class="modal-body" id="form-container">
-                    @Html.Partial("_RecommendBook")
+    <div class="modal fade" id="SendRecommend" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
+        <div class="modal-dialog modalAccountEdit" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3><strong>Enter your friend nick<span class="accountname"></span></strong></h3>
                 </div>
+
+                    <div class="modal-body" id="form-container">
+                        @Html.Partial("_RecommendBook")
+                    </div>
             </div>
         </div>
     </div>
-</div>
+}
 
 @section Scripts {
 
@@ -187,48 +240,48 @@
                     success: function ()
                     {
                         currScore = number;
-
-                        for (var i = 1; i <= 10 ;i++)
-                        {
-                            if (i <= number)
-                            {
-                                $("#" + i).attr('src', '/Content/redstar.png');
-                            }
-                            else
-                            {
-                                $("#" + i).attr('src', '/Content/graystar.png');
-                            }
-                        }
+                        changeStar(number);
                     }
                 });
             });
 
             $("#1,#2,#3,#4,#5,#6,#7,#8,#9,#10").hover(function (e) {
-
                 var number = parseInt(event.target.id);
-
-                for (var i = 1; i <= 10; i++) {
-                    if (i <= number) {
-                        $("#" + i).attr('src', '/Content/redstar.png');
-                    }
-                    else {
-                        $("#" + i).attr('src', '/Content/graystar.png');
-                    }
-                }
+                changeStar(number);
             });
 
             $("#1,#2,#3,#4,#5,#6,#7,#8,#9,#10").mouseleave(function (e) {
-
                 var number = currScore;
+                changeStar(number);
 
+            });
+
+            function changeStar(number) {
                 for (var i = 1; i <= 10; i++) {
                     if (i <= number) {
-                        $("#" + i).attr('src', '/Content/redstar.png');
+                        $("#" + i).attr('src', '/Content/Images/redstar.png');
                     }
                     else {
-                        $("#" + i).attr('src', '/Content/graystar.png');
+                        $("#" + i).attr('src', '/Content/Images/graystar.png');
                     }
                 }
+            }
+
+            $("#like").click(function (e) {
+
+                e.preventDefault();
+
+                var number = parseInt(event.target.id);
+
+                $.ajax({
+                    url:'@Url.Action("AddScore", "Books")', // comma here instead of semicolon
+                    data: { id: @Model.Id, score: number },
+                    success: function ()
+                    {
+                        currScore = number;
+                        changeStar(number);
+                    }
+                });
             });
 
         });

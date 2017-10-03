@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace MyBookList.Models.User
+namespace MyBookList.Models.Books
 {
     public class BookScoreList
     {
@@ -14,5 +15,8 @@ namespace MyBookList.Models.User
         public int BookId { get; set; }
 
         public short Score { get; set; }
+        
+        [ForeignKey("BookId")]
+        public virtual Book Book { get; set; }
     }
 }

@@ -17,8 +17,9 @@ namespace MyBookList.ViewModels
         public string Title { get; set; }
 
         [Required]
+        [Display(Name = "Release Date")]
         public DateTime ReleaseDate { get; set; }
-        
+
         public string Description { get; set; }
 
         [Required]

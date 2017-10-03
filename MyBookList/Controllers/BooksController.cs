@@ -13,6 +13,9 @@ using MyBookList.FunctionalClasses;
 using System.IO;
 using AutoMapper;
 using MyBookList.ViewModels.Books;
+using MyHobbyList.ViewModels.User;
+using MyHobbyList.Models.Books;
+using MyBookList.Models.Books;
 
 namespace MyBookList.Controllers
 {
@@ -42,7 +45,7 @@ namespace MyBookList.Controllers
             {
                 view.Add(Mapper.Map<Book, BookIndexViewModel>(book));
             }
-
+            
             return View(view);
         }
 
@@ -68,7 +71,7 @@ namespace MyBookList.Controllers
             
             if (User.Identity.IsAuthenticated)
             {
-                var score = _context.BookScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.BookId == book.Id);
+                var score = book.BookScoreLists.SingleOrDefault(m => m.UserId == currentUserId);
                 
                 if(score != null)
                 {
@@ -137,6 +140,34 @@ namespace MyBookList.Controllers
                 }
             }
 
+            //comments
+            var comments = new List<CommentViewModel>();
+
+            var DbComments = book.BookComments;
+
+            foreach (var item in DbComments)
+            {
+                var namesModel = item.BookLikedBy.ToList();
+
+                var names = new List<string>();
+
+                foreach(var element in namesModel)
+                {
+                    names.Add(element.Name);
+                }
+
+                comments.Add(new CommentViewModel()
+                {
+                    Id = item.Id,
+                    CommentData = item.CommentData,
+                    UserId = item.UserId,
+                    DateAdded = item.DateAdded,
+                    LikeUserNames = names
+                });
+            }
+
+            view.comments = comments;
+
             view.SimiliarBooks = SimiliarList;
 
             return View(view);
@@ -199,6 +230,9 @@ namespace MyBookList.Controllers
 
                 book.AddedByUserId = userId;
                 book.ImageId = imageId;
+                book.BookComments = new List<BookComment>();
+                book.BookScoreLists = new List<BookScoreList>();
+
                 if (String.IsNullOrWhiteSpace(bookForm.Description))
                 {
                     book.Description = GlobalVariables.EmptyDescription;
@@ -237,20 +271,19 @@ namespace MyBookList.Controllers
         {   
             var currentUserId = User.Identity.GetUserId();
 
-            var currentScore = _context.BookScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.BookId == id);
-
             var book = _context.Books.Single(m => m.Id == id);
 
+            var currentScore = book.BookScoreLists.SingleOrDefault(m => m.UserId == currentUserId);
+            
             if (currentScore == null)
             {
-                _context.BookScoreLists.Add(new Models.User.BookScoreList()
+                book.BookScoreLists.Add(new BookScoreList()
                 {
                     BookId = id,
                     UserId = currentUserId,
                     Score = score
                 });
-
-
+                
                 book.NumberOfVoters++;
                 book.AverageScore = ((book.AverageScore * (book.NumberOfVoters - 1)) + score) / book.NumberOfVoters;
             }
@@ -281,6 +314,63 @@ namespace MyBookList.Controllers
             viewModel.BookGenres = _context.BookGenres.ToList();
 
             return PartialView("_BookFormModal", viewModel);
+        }
+
+        public ActionResult AddComment(int id,string CommentData)
+        {
+            if (String.IsNullOrWhiteSpace(CommentData))
+            {
+                TempData.Add("fail", "You need to write something...");
+
+                return RedirectToAction("Details/" + id, "Books");
+            }
+            else if(_context.Books.SingleOrDefault(x => x.Id == id) == null)
+            {
+                TempData.Add("fail", "No book with this id");
+
+                return RedirectToAction("Details/" + id, "Books");
+            }
+            else
+            {
+                var comment = new BookComment()
+                {
+                    BookId = id,
+                    CommentData = CommentData,
+                    UserId = User.Identity.GetUserName(),
+                    DateAdded = DateTime.Now,
+                    BookLikedBy = new List<BookLikedBy>()
+                };
+
+                _context.Books.Single(x => x.Id == id).BookComments.Add(comment);
+                
+                _context.SaveChanges();
+
+                TempData.Add("success", "Your comment was added");
+
+                return RedirectToAction("Details/" + id, "Books");
+            }
+        }
+
+        public ActionResult LikeComment(int id,int commentId)
+        {
+            var book = _context.Books.SingleOrDefault(m => m.Id == id);
+
+            if(book == null) { return new HttpNotFoundResult(); }
+
+            var comment = book.BookComments.SingleOrDefault(m => m.Id == commentId);
+
+            if (comment == null) { return new HttpNotFoundResult(); }
+
+            var user = User.Identity.GetUserName();
+
+            if(comment.BookLikedBy.SingleOrDefault(m => m.Name == user) == null)
+            {
+                comment.BookLikedBy.Add(new BookLikedBy() { Name = user });
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Details/" + id, "Books");
         }
     }
 }

@@ -4,7 +4,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using MyBookList.Models.User;
+using MyHobbyList.Models.Books;
+using MyHobbyList.Models.Games;
+using MyHobbyList.Models.Movies;
 
 namespace MyBookList.Models
 {
@@ -46,11 +48,7 @@ namespace MyBookList.Models
         public DbSet<UserMoviesList> UserMoviesLists { get; set; }
         public DbSet<UserGamesList> UserGamesLists { get; set; }
         public DbSet<UserSeriesList> UserSeriesLists { get; set; }
-
-        public DbSet<BookScoreList> BookScoreLists { get; set; }
-        public DbSet<MovieScoreList> MovieScoreLists { get; set; }
-        public DbSet<GameScoreList> GameScoreLists { get; set; }
-        public DbSet<SeriesScoreList> SeriesScoreLists { get; set; }
+        
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

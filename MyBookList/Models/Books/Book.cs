@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using MyBookList.Models.Books;
+using MyHobbyList.Models.Books;
 using WebGrease.Activities;
 
 namespace MyBookList.Models
@@ -45,5 +47,9 @@ namespace MyBookList.Models
         public double AverageScore { get; set; }
 
         public long NumberOfVoters { get; set; }
+
+        public virtual List<BookComment> BookComments { get; set; }
+
+        public virtual List<BookScoreList> BookScoreLists { get; set; }
     }
 }

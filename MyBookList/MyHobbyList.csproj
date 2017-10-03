@@ -200,7 +200,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\ModalController.cs" />
     <Compile Include="Controllers\MoviesController.cs" />
     <Compile Include="Controllers\SeriesController.cs" />
     <Compile Include="Controllers\UserProfileController.cs" />
@@ -349,11 +348,71 @@
     <Compile Include="Migrations\201709231646094_scoresInItemModels.Designer.cs">
       <DependentUpon>201709231646094_scoresInItemModels.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709281558216_TryToAddComments.cs" />
+    <Compile Include="Migrations\201709281558216_TryToAddComments.Designer.cs">
+      <DependentUpon>201709281558216_TryToAddComments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709281829365_AddDataToComments.cs" />
+    <Compile Include="Migrations\201709281829365_AddDataToComments.Designer.cs">
+      <DependentUpon>201709281829365_AddDataToComments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709291827543_comments.cs" />
+    <Compile Include="Migrations\201709291827543_comments.Designer.cs">
+      <DependentUpon>201709291827543_comments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709291913112_RemoveCommentsForNow.cs" />
+    <Compile Include="Migrations\201709291913112_RemoveCommentsForNow.Designer.cs">
+      <DependentUpon>201709291913112_RemoveCommentsForNow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709300039315_CommentsForGames.cs" />
+    <Compile Include="Migrations\201709300039315_CommentsForGames.Designer.cs">
+      <DependentUpon>201709300039315_CommentsForGames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709301500496_CommentsForEveryone.cs" />
+    <Compile Include="Migrations\201709301500496_CommentsForEveryone.Designer.cs">
+      <DependentUpon>201709301500496_CommentsForEveryone.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709301721006_test.cs" />
+    <Compile Include="Migrations\201709301721006_test.Designer.cs">
+      <DependentUpon>201709301721006_test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709301902285_test2.cs" />
+    <Compile Include="Migrations\201709301902285_test2.Designer.cs">
+      <DependentUpon>201709301902285_test2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709301910299_test3.cs" />
+    <Compile Include="Migrations\201709301910299_test3.Designer.cs">
+      <DependentUpon>201709301910299_test3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709301938546_ReworkBookComments.cs" />
+    <Compile Include="Migrations\201709301938546_ReworkBookComments.Designer.cs">
+      <DependentUpon>201709301938546_ReworkBookComments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709302043342_ReworkCommentForRest.cs" />
+    <Compile Include="Migrations\201709302043342_ReworkCommentForRest.Designer.cs">
+      <DependentUpon>201709302043342_ReworkCommentForRest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709302116466_ReworkScoresForBooks.cs" />
+    <Compile Include="Migrations\201709302116466_ReworkScoresForBooks.Designer.cs">
+      <DependentUpon>201709302116466_ReworkScoresForBooks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709302246148_ReworkScoresForRest.cs" />
+    <Compile Include="Migrations\201709302246148_ReworkScoresForRest.Designer.cs">
+      <DependentUpon>201709302246148_ReworkScoresForRest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710031814465_Fix.cs" />
+    <Compile Include="Migrations\201710031814465_Fix.Designer.cs">
+      <DependentUpon>201710031814465_Fix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Admin\Ticket.cs" />
     <Compile Include="Models\Admin\BannedUser.cs" />
+    <Compile Include="Models\Books\BookComment.cs" />
+    <Compile Include="Models\Books\BookLikedBy.cs" />
     <Compile Include="Models\ExtensionBook.cs" />
+    <Compile Include="Models\Games\GameComment.cs" />
+    <Compile Include="Models\Games\GameLikedBy.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Image.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -361,14 +420,18 @@
     <Compile Include="Models\Books\BookGenre.cs" />
     <Compile Include="Models\Games\Game.cs" />
     <Compile Include="Models\Games\GameGenre.cs" />
+    <Compile Include="Models\Movies\MovieLikedBy.cs" />
     <Compile Include="Models\Movies\Movie.cs" />
+    <Compile Include="Models\Movies\MovieComment.cs" />
     <Compile Include="Models\Movies\MovieGenre.cs" />
-    <Compile Include="Models\Series\Series.cs" />
-    <Compile Include="Models\Series\SeriesGenre.cs" />
-    <Compile Include="Models\User\BookScoreList.cs" />
-    <Compile Include="Models\User\GameScoreList.cs" />
-    <Compile Include="Models\User\MovieScoreList.cs" />
-    <Compile Include="Models\User\SeriesScoreList.cs" />
+    <Compile Include="Models\Serie\SeriesLikedBy.cs" />
+    <Compile Include="Models\Serie\Series.cs" />
+    <Compile Include="Models\Serie\SeriesComment.cs" />
+    <Compile Include="Models\Serie\SeriesGenre.cs" />
+    <Compile Include="Models\Books\BookScoreList.cs" />
+    <Compile Include="Models\Games\GameScoreList.cs" />
+    <Compile Include="Models\Movies\MovieScoreList.cs" />
+    <Compile Include="Models\Serie\SeriesScoreList.cs" />
     <Compile Include="Models\User\UserBooksList.cs" />
     <Compile Include="Models\User\UserGamesList.cs" />
     <Compile Include="Models\User\UserMoviesList.cs" />
@@ -393,6 +456,7 @@
     <Compile Include="ViewModels\Series\SeriesFormViewModel.cs" />
     <Compile Include="ViewModels\Series\SeriesIndexViewModel.cs" />
     <Compile Include="ViewModels\Series\SimiliarSeriesMini.cs" />
+    <Compile Include="ViewModels\User\CommentViewModel.cs" />
     <Compile Include="ViewModels\User\UserProfileViewModel.cs" />
     <Compile Include="ViewModels\User\UserTicketViewModel.cs" />
     <Compile Include="ViewModels\ViewModelSharedProperties.cs" />
@@ -401,7 +465,7 @@
     <Content Include="Content\bootstrap-slate.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\redstar.png" />
+    <Content Include="Content\Images\redstar.png" />
     <Content Include="Content\DataTables\css\autoFill.bootstrap.css" />
     <Content Include="Content\DataTables\css\autoFill.bootstrap.min.css" />
     <Content Include="Content\DataTables\css\autoFill.dataTables.css" />
@@ -509,17 +573,19 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
-    <Content Include="Content\default.jpg" />
+    <Content Include="Content\Images\default.jpg" />
     <Content Include="Content\demos.css" />
     <Content Include="Content\jquery.Jcrop.css" />
     <Content Include="Content\main.css" />
+    <Content Include="Content\styles\DetailsPage.css" />
     <Content Include="Content\styles\MainPage.css" />
-    <Content Include="Content\graystar.png" />
-    <Content Include="Content\WithBook.png" />
+    <Content Include="Content\Images\graystar.png" />
+    <Content Include="Content\Images\WithBook.png" />
+    <Content Include="Content\styles\Modals.css" />
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.min.css" />
-    <Content Include="Content\WithGame.jpg" />
-    <Content Include="Content\WithMovie.jpg" />
+    <Content Include="Content\Images\WithGame.jpg" />
+    <Content Include="Content\Images\WithMovie.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -815,6 +881,48 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709231646094_scoresInItemModels.resx">
       <DependentUpon>201709231646094_scoresInItemModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709281558216_TryToAddComments.resx">
+      <DependentUpon>201709281558216_TryToAddComments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709281829365_AddDataToComments.resx">
+      <DependentUpon>201709281829365_AddDataToComments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709291827543_comments.resx">
+      <DependentUpon>201709291827543_comments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709291913112_RemoveCommentsForNow.resx">
+      <DependentUpon>201709291913112_RemoveCommentsForNow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709300039315_CommentsForGames.resx">
+      <DependentUpon>201709300039315_CommentsForGames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709301500496_CommentsForEveryone.resx">
+      <DependentUpon>201709301500496_CommentsForEveryone.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709301721006_test.resx">
+      <DependentUpon>201709301721006_test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709301902285_test2.resx">
+      <DependentUpon>201709301902285_test2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709301910299_test3.resx">
+      <DependentUpon>201709301910299_test3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709301938546_ReworkBookComments.resx">
+      <DependentUpon>201709301938546_ReworkBookComments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709302043342_ReworkCommentForRest.resx">
+      <DependentUpon>201709302043342_ReworkCommentForRest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709302116466_ReworkScoresForBooks.resx">
+      <DependentUpon>201709302116466_ReworkScoresForBooks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709302246148_ReworkScoresForRest.resx">
+      <DependentUpon>201709302246148_ReworkScoresForRest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710031814465_Fix.resx">
+      <DependentUpon>201710031814465_Fix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

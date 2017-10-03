@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using MyHobbyList.Models;
 
 namespace MyBookList.Models
 {
@@ -37,5 +38,9 @@ namespace MyBookList.Models
         public double AverageScore { get; set; }
 
         public long NumberOfVoters { get; set; }
+
+        public virtual List<SeriesComment> SeriesComments { get; set; }
+
+        public virtual List<SeriesScoreList> SeriesScoreLists { get; set; }
     }
 }

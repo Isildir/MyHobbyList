@@ -55,17 +55,17 @@ body{
 }
 
 .item:nth-child(1) {
-    background: url(/Content/WithBook.png) no-repeat center center fixed;
+    background: url(/Content/Images/WithBook.png) no-repeat center center fixed;
     background-size: cover;
 }
 
 .item:nth-child(2) {
-    background: url(/Content/WithGame.jpg) no-repeat center center fixed;
+    background: url(/Content/Images/WithGame.jpg) no-repeat center center fixed;
     background-size: cover;
 }
 
 .item:nth-child(3) {
-    background: url(/Content/WithMovie.jpg) no-repeat center center fixed;
+    background: url(/Content/Images/WithMovie.jpg) no-repeat center center fixed;
     background-size: cover;
 }
 

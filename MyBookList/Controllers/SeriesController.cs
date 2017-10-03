@@ -10,6 +10,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MyHobbyList.ViewModels.User;
+using MyHobbyList.Models;
 
 namespace MyBookList.Controllers
 {
@@ -88,7 +90,7 @@ namespace MyBookList.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                var score = _context.SeriesScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.SeriesId == serie.Id);
+                var score = serie.SeriesScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.SeriesId == serie.Id);
 
                 if (score != null)
                 {
@@ -154,6 +156,34 @@ namespace MyBookList.Controllers
                 }
             }
 
+            //comments
+            var comments = new List<CommentViewModel>();
+
+            var DbComments = serie.SeriesComments;
+
+            foreach (var item in DbComments)
+            {
+                var namesModel = item.SeriesLikedBy.ToList();
+
+                var names = new List<string>();
+
+                foreach (var element in namesModel)
+                {
+                    names.Add(element.Name);
+                }
+
+                comments.Add(new CommentViewModel()
+                {
+                    Id = item.Id,
+                    CommentData = item.CommentData,
+                    UserId = item.UserId,
+                    DateAdded = item.DateAdded,
+                    LikeUserNames = names
+                });
+            }
+
+            view.comments = comments;
+
             view.SimiliarSeries = SimiliarList;
             
             return View(view);
@@ -184,6 +214,8 @@ namespace MyBookList.Controllers
 
                 series.AddedByUserId = userId;
                 series.ImageId = imageId;
+                series.SeriesComments = new List<SeriesComment>();
+                series.SeriesScoreLists = new List<SeriesScoreList>();
 
                 TempData.Add("success", "Series Successfully Added to base");
                 _context.Series.Add(series);
@@ -214,13 +246,13 @@ namespace MyBookList.Controllers
         {
             var currentUserId = User.Identity.GetUserId();
 
-            var currentScore = _context.SeriesScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.SeriesId == id);
-
             var serie = _context.Series.Single(m => m.Id == id);
 
+            var currentScore = serie.SeriesScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.SeriesId == id);
+            
             if (currentScore == null)
             {
-                _context.SeriesScoreLists.Add(new Models.User.SeriesScoreList()
+               serie.SeriesScoreLists.Add(new SeriesScoreList()
                 {
                     SeriesId = id,
                     UserId = currentUserId,
@@ -256,6 +288,63 @@ namespace MyBookList.Controllers
             var viewModel = Mapper.Map<Series, SeriesFormViewModel>(series);
             
             return PartialView("_SeriesFormModal", viewModel);
+        }
+
+        public ActionResult AddComment(int id, string CommentData)
+        {
+            if (String.IsNullOrWhiteSpace(CommentData))
+            {
+                TempData.Add("fail", "You need to write something...");
+
+                return RedirectToAction("Details/" + id, "Series");
+            }
+            else if (_context.Series.SingleOrDefault(x => x.Id == id) == null)
+            {
+                TempData.Add("fail", "No series with this id");
+
+                return RedirectToAction("Details/" + id, "Series");
+            }
+            else
+            {
+                var comment = new SeriesComment()
+                {
+                    SeriesId = id,
+                    CommentData = CommentData,
+                    UserId = User.Identity.GetUserName(),
+                    DateAdded = DateTime.Now,
+                    SeriesLikedBy = new List<SeriesLikedBy>()
+                };
+
+                _context.Series.Single(x => x.Id == id).SeriesComments.Add(comment);
+
+                _context.SaveChanges();
+
+                TempData.Add("success", "Your comment was added");
+
+                return RedirectToAction("Details/" + id, "Series");
+            }
+        }
+
+        public ActionResult LikeComment(int id, int commentId)
+        {
+            var serie = _context.Series.SingleOrDefault(m => m.Id == id);
+
+            if (serie == null) { return new HttpNotFoundResult(); }
+
+            var comment = serie.SeriesComments.SingleOrDefault(m => m.Id == commentId);
+
+            if (comment == null) { return new HttpNotFoundResult(); }
+
+            var user = User.Identity.GetUserName();
+
+            if (comment.SeriesLikedBy.SingleOrDefault(m => m.Name == user) == null)
+            {
+                comment.SeriesLikedBy.Add(new SeriesLikedBy() { Name = user });
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Details/" + id, "Series");
         }
     }
 }

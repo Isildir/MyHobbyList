@@ -10,6 +10,9 @@ using MyBookList.ViewModels;
 using MyBookList.FunctionalClasses;
 using AutoMapper;
 using MyBookList.ViewModels.Movies;
+using MyHobbyList.Models.Movies;
+using MyHobbyList.ViewModels.User;
+using MyBookList.Models.Movies;
 
 namespace MyBookList.Controllers
 {
@@ -68,7 +71,7 @@ namespace MyBookList.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                var score = _context.MovieScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.MovieId == movie.Id);
+                var score = movie.MovieScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.MovieId == movie.Id);
 
                 if (score != null)
                 {
@@ -134,6 +137,34 @@ namespace MyBookList.Controllers
                 }
             }
 
+            //comments
+            var comments = new List<CommentViewModel>();
+
+            var DbComments = movie.MovieComments;
+
+            foreach (var item in DbComments)
+            {
+                var namesModel = item.MovieLikedBy.ToList();
+
+                var names = new List<string>();
+
+                foreach (var element in namesModel)
+                {
+                    names.Add(element.Name);
+                }
+
+                comments.Add(new CommentViewModel()
+                {
+                    Id = item.Id,
+                    CommentData = item.CommentData,
+                    UserId = item.UserId,
+                    DateAdded = item.DateAdded,
+                    LikeUserNames = names
+                });
+            }
+
+            view.comments = comments;
+
             view.SimiliarMovies = SimiliarList;
 
             return View(view);
@@ -184,6 +215,8 @@ namespace MyBookList.Controllers
 
                 movie.AddedByUserId = userId;
                 movie.ImageId = imageId;
+                movie.MovieComments = new List<MovieComment>();
+                movie.MovieScoreLists = new List<MovieScoreList>();
 
                 TempData.Add("success", "Movie Successfully Added to base");
                 _context.Movies.Add(movie);
@@ -214,13 +247,14 @@ namespace MyBookList.Controllers
         {
             var currentUserId = User.Identity.GetUserId();
 
-            var currentScore = _context.MovieScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.MovieId == id);
-
             var movie = _context.Movies.Single(m => m.Id == id);
+
+            var currentScore = movie.MovieScoreLists.SingleOrDefault(m => m.UserId == currentUserId && m.MovieId == id);
+
 
             if (currentScore == null)
             {
-                _context.MovieScoreLists.Add(new Models.User.MovieScoreList()
+                movie.MovieScoreLists.Add(new MovieScoreList()
                 {
                     MovieId = id,
                     UserId = currentUserId,
@@ -256,6 +290,63 @@ namespace MyBookList.Controllers
             var viewModel = Mapper.Map<Movie, MovieFormViewModel>(movie);
             
             return PartialView("_MovieFormModal", viewModel);
+        }
+
+        public ActionResult AddComment(int id, string CommentData)
+        {
+            if (String.IsNullOrWhiteSpace(CommentData))
+            {
+                TempData.Add("fail", "You need to write something...");
+
+                return RedirectToAction("Details/" + id, "Movies");
+            }
+            else if (_context.Movies.SingleOrDefault(x => x.Id == id) == null)
+            {
+                TempData.Add("fail", "No movie with this id");
+
+                return RedirectToAction("Details/" + id, "Movies");
+            }
+            else
+            {
+                var comment = new MovieComment()
+                {
+                    MovieId = id,
+                    CommentData = CommentData,
+                    UserId = User.Identity.GetUserName(),
+                    DateAdded = DateTime.Now,
+                    MovieLikedBy = new List<MovieLikedBy>()
+                };
+
+                _context.Movies.Single(x => x.Id == id).MovieComments.Add(comment);
+
+                _context.SaveChanges();
+
+                TempData.Add("success", "Your comment was added");
+
+                return RedirectToAction("Details/" + id, "Movies");
+            }
+        }
+
+        public ActionResult LikeComment(int id, int commentId)
+        {
+            var movie = _context.Movies.SingleOrDefault(m => m.Id == id);
+
+            if (movie == null) { return new HttpNotFoundResult(); }
+
+            var comment = movie.MovieComments.SingleOrDefault(m => m.Id == commentId);
+
+            if (comment == null) { return new HttpNotFoundResult(); }
+
+            var user = User.Identity.GetUserName();
+
+            if (comment.MovieLikedBy.SingleOrDefault(m => m.Name == user) == null)
+            {
+                comment.MovieLikedBy.Add(new MovieLikedBy() { Name = user });
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Details/" + id, "Movies");
         }
     }
 }

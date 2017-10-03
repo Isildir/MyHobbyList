@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using MyBookList.Models;
 using MyBookList.ViewModels.Movies;
+using MyHobbyList.ViewModels.User;
 
 namespace MyBookList.ViewModels
 {
@@ -28,5 +29,7 @@ namespace MyBookList.ViewModels
         public double YourScore { get; set; } = 0;
 
         public long NumberOfVoters { get; set; } = 0;
+
+        public IEnumerable<CommentViewModel> comments { get; set; }
     }
 }

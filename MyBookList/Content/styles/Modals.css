@@ -1,0 +1,66 @@
+﻿.modal-header h3 {
+    text-align: center;
+    margin: 2px;
+}
+
+.form-control {
+    max-width: initial !important;
+    background-color: #4a5158;
+    color: #c8c8c8;
+    text-align: center;
+}
+
+.modal-dialog {
+    width: 400px;
+}
+
+.modal-dialog label {
+    text-align: center;
+    font-size: 18px;
+    font-weight: lighter;
+    display: block;
+    margin: 0 auto;
+}
+
+.form-group {
+    text-align: center;
+}
+
+.form-group .input-files {
+    display: none;
+}
+
+.label-for-input {
+    border: 1px solid #c8c8c8;
+    width: 50%;
+    border-radius: 15px;
+    margin-bottom: 15px !important;
+}
+
+.label-for-input:hover,
+.button-for-modal:hover {
+    background-color: #c8c8c8;
+    border: 1px solid #272b30;
+    color: #272b30;
+    transition: color 1s;
+    transition: background-color 1s;
+    box-shadow: 2px 2px 5px #575555;
+}
+
+.button-for-modal {
+    border: 1px solid #c8c8c8;
+    width: 20%;
+    border-radius: 15px;
+    margin-bottom: 5px !important;
+    background-color: transparent;
+}
+
+.modal-body {
+    padding: 5px 20px;
+}
+
+#Description,
+#TicketBody {
+    resize: none;
+    height: 200px;
+}

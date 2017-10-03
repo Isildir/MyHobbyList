@@ -5,6 +5,7 @@ using System.Web;
 using MyBookList.Migrations;
 using MyBookList.Models;
 using MyBookList.ViewModels.Series;
+using MyHobbyList.ViewModels.User;
 
 namespace MyBookList.ViewModels
 {
@@ -29,5 +30,7 @@ namespace MyBookList.ViewModels
         public double YourScore { get; set; } = 0;
 
         public long NumberOfVoters { get; set; } = 0;
+
+        public IEnumerable<CommentViewModel> comments { get; set; }
     }
 }

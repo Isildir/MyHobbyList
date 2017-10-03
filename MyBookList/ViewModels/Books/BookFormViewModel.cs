@@ -15,18 +15,17 @@ namespace MyBookList.ViewModels
         public int Id { get; set; }
 
         [Required]
-        [Display(Name = "Tytuł")]
         public string Title { get; set; }
 
         [Required]
-        [Display(Name = "Autor")]
         public string Author { get; set; }
 
         [Required]
-        [Display(Name = "Data Wydania")]
+        [Display(Name = "Release Date")]
         public DateTime ReleaseDate { get; set; }
         
         [Required]
+        [Display(Name = "Genre")]
         public int BookGenreId { get; set; }
 
         public string Description { get; set; }
