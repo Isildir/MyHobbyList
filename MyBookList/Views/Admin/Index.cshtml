@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MyBookList.ViewModels.AdminPanelIndexView>
+﻿@model IEnumerable<MyHobbyList.ViewModels.AdminPanelIndexView>
 
 @{
     ViewBag.Title = "Index";
@@ -32,15 +32,3 @@
 
 
 @Html.ActionLink("Banned Users List", "BannedUsersList", "Admin", null, new { @class = "btn btn-primary" })
-
-@section scripts
-{
-    @if (TempData.ContainsKey("success"))
-    {
-        <script>toastr.success("@TempData.SingleOrDefault(x => x.Key == "success").Value")</script>
-    }
-    else if (TempData.ContainsKey("fail"))
-    {
-        <script>toastr.success("@TempData.SingleOrDefault(x => x.Key == "fail").Value")</script>
-    }
-}

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(MyBookList.Startup))]
-namespace MyBookList
+[assembly: OwinStartupAttribute(typeof(MyHobbyList.Startup))]
+namespace MyHobbyList
 {
     public partial class Startup
     {

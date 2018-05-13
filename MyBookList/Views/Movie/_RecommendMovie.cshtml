@@ -1,0 +1,14 @@
+﻿
+@using (Html.BeginForm("Recommend", "UserProfile"))
+{
+    @Html.ValidationSummary()
+    <div class="form-group">
+        @Html.TextBox("userName", null, new { @class = "form-control" })
+    </div>
+
+    @Html.Hidden("id", new { id = Model.Id });
+    @Html.Hidden("type", "Movie");
+
+    <button type="submit" class="button-for-modal">Send</button>
+}
+

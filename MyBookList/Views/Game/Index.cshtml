@@ -1,0 +1,48 @@
+﻿@model IEnumerable<MyHobbyList.ViewModels.GameIndexViewModel>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 style="width:100%;text-align:center;">Games List</h2>
+
+<table id="dataTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" style="width:100%">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Game Title</th>
+            <th>Score</th>
+            <th>Studio</th>
+            <th>Release Date</th>
+            <th>Game Genre</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="width:80px;text-align:center"><img id="image" src='@Url.Action("ShowMini", "Image", new { id = item.ImageId})' height="100" width="70" /></td>
+                <th>@Html.ActionLink(item.Title, "Details", "Game", new { id = item.Id }, null)</th>
+                <td>@item.AverageScore</td>
+                <th>@item.Studio</th>
+                <th>@item.ReleaseDate.ToString("MM/dd/yyyy")</th>
+                <th>@item.GenreName</th>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+                "order": [],
+                "columnDefs": [
+                    { "targets": [0], "searchable": false, "orderable": false, "visible": true }
+                ]
+            });
+        });
+    </script>
+}

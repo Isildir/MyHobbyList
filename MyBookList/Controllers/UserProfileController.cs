@@ -1,223 +1,132 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Xml.Linq;
-using Microsoft.AspNet.Identity;
-using MyBookList.Models;
-using MyBookList.ViewModels;
-using MyBookList.ViewModels.User;
+using MyHobbyList.Models;
+using MyHobbyList.ViewModels;
+using System.Data.Entity;
 using AutoMapper;
+using System;
 
-namespace MyBookList.Controllers
+namespace MyHobbyList.Controllers
 {
     [Authorize]
-    public class UserProfileController : Controller
+    public class UserProfileController : BaseController
     {
-        private ApplicationDbContext _context;
-
         public UserProfileController()
         {
             _context = new ApplicationDbContext();
         }
 
-        private List<BookIndexViewModel> GetUserBooks(string userId)
+        private Entity GetEntity(int id, ElementType elementType, string userId)
         {
-            var books = _context.UserBooksLists.Where(m => m.UserId == userId && !m.Reccomended).ToList();
-
-            var recommendedBooks = _context.UserBooksLists.Where(m => m.UserId == userId && m.Reccomended).ToList();
-
-            var booksIds = books.Select(book => book.BookId).ToList();
-
-            var recommendedData = new Dictionary<int, string>();
-            var recommendedDataIds = new List<int>();
-
-            foreach(var x in recommendedBooks)
+            switch (elementType)
             {
-                recommendedData.Add(x.BookId,x.RecommendingUserName);
-                recommendedDataIds.Add(x.BookId);
+                case ElementType.Book:
+                    return userId != null ? _context.Books.Include(a => a.Genre).FirstOrDefault(x => x.Id == id && x.CreateById == userId) : _context.Books.Find(id);
+                case ElementType.Game:
+                    return userId != null ? _context.Games.Include(a => a.Genre).FirstOrDefault(x => x.Id == id && x.CreateById == userId) : _context.Games.Find(id);
+                case ElementType.Movie:
+                    return userId != null ? _context.Movies.Include(a => a.Genre).FirstOrDefault(x => x.Id == id && x.CreateById == userId) : _context.Movies.Find(id);
+                default:
+                    return null;
             }
+        }
 
-            var list = booksIds.Select(bookId => _context.Books.Single(m => m.Id == bookId)).ToList();
+        private IList<V> MapEntitiesToIndexViewModels<T,V>(IList<T> entities)
+        {
+            var result = new List<V>();
 
-            var recommendedList = recommendedDataIds.Select(bookId => _context.Books.Single(m => m.Id == bookId)).ToList();
-
-            var result = new List<BookIndexViewModel>();
-
-            foreach (var item in recommendedList)
-            {
-                var newItem = Mapper.Map<Book, BookIndexViewModel>(item);
-
-                newItem.Recommended = true;
-                newItem.RecommenderName = recommendedData.Single(x => x.Key == item.Id).Value;
-
-                result.Add(newItem);
-            }
-            
-            foreach (var item in list)
-            {
-                var newItem = Mapper.Map<Book, BookIndexViewModel>(item);
-
-                newItem.Recommended = false;
-
-                result.Add(newItem);
-            }
+            foreach(var entity in entities)
+                result.Add(Mapper.Map<T, V>(entity));
 
             return result;
         }
 
-        private List<MovieIndexViewModel> GetUserMovies(string userId)
+        private UserData GetUserDataByEmail(string email)
         {
-            var movies = _context.UserMoviesLists.Where(m => m.UserId == userId && !m.Reccomended).ToList();
-
-            var recommendedMovies = _context.UserMoviesLists.Where(m => m.UserId == userId && m.Reccomended).ToList();
-
-            var movieIds = movies.Select(movie => movie.MovieId).ToList();
-
-            var recommendedData = new Dictionary<int, string>();
-            var recommendedDataIds = new List<int>();
-
-            foreach (var x in recommendedMovies)
-            {
-                recommendedData.Add(x.MovieId, x.RecommendingUserName);
-                recommendedDataIds.Add(x.MovieId);
-            }
-
-            var list = movieIds.Select(movieId => _context.Movies.Single(m => m.Id == movieId)).ToList();
-
-            var recommendedList = recommendedDataIds.Select(movieId => _context.Movies.Single(m => m.Id == movieId)).ToList();
-
-            var result = new List<MovieIndexViewModel>();
-
-            foreach (var item in recommendedList)
-            {
-                var newItem = Mapper.Map<Movie, MovieIndexViewModel>(item);
-
-                newItem.Recommended = true;
-                newItem.RecommenderName = recommendedData.Single(x => x.Key == item.Id).Value;
-
-                result.Add(newItem);
-            }
-
-            foreach (var item in list)
-            {
-                var newItem = Mapper.Map<Movie, MovieIndexViewModel>(item);
-
-                newItem.Recommended = false;
-
-                result.Add(newItem);
-            }
-
-            return result;
+            return _context.UserDatas.FirstOrDefault(m => m.Email.Equals(email));
         }
 
-        private List<GameIndexViewModel> GetUserGames(string userId)
-        {
-            var games = _context.UserGamesLists.Where(m => m.UserId == userId && !m.Reccomended).ToList();
-
-            var recommendedGames = _context.UserGamesLists.Where(m => m.UserId == userId && m.Reccomended).ToList();
-
-            var gamesIds = games.Select(game => game.GameId).ToList();
-
-            var recommendedData = new Dictionary<int, string>();
-            var recommendedDataIds = new List<int>();
-
-            foreach (var x in recommendedGames)
-            {
-                recommendedData.Add(x.GameId, x.RecommendingUserName);
-                recommendedDataIds.Add(x.GameId);
-            }
-
-            var list = gamesIds.Select(bookId => _context.Games.Single(m => m.Id == bookId)).ToList();
-
-            var recommendedList = recommendedDataIds.Select(bookId => _context.Games.Single(m => m.Id == bookId)).ToList();
-
-            var result = new List<GameIndexViewModel>();
-
-            foreach (var item in recommendedList)
-            {
-                var newItem = Mapper.Map<Game, GameIndexViewModel>(item);
-
-                newItem.Recommended = true;
-                newItem.RecommenderName = recommendedData.Single(x => x.Key == item.Id).Value;
-
-                result.Add(newItem);
-            }
-
-            foreach (var item in list)
-            {
-                var newItem = Mapper.Map<Game, GameIndexViewModel>(item);
-
-                newItem.Recommended = false;
-
-                result.Add(newItem);
-            }
-
-            return result;
-        }
-
-        private List<SeriesIndexViewModel> GetUserSeries(string userId)
-        {
-            var series = _context.UserSeriesLists.Where(m => m.UserId == userId && !m.Reccomended).ToList();
-
-            var recommendedSeries = _context.UserSeriesLists.Where(m => m.UserId == userId && m.Reccomended).ToList();
-
-            var seriesIds = series.Select(serie => serie.SeriesId).ToList();
-
-            var recommendedData = new Dictionary<int, string>();
-            var recommendedDataIds = new List<int>();
-
-            foreach(var x in recommendedSeries)
-            {
-                recommendedData.Add(x.SeriesId,x.RecommendingUserName);
-                recommendedDataIds.Add(x.SeriesId);
-            }
-
-            var list = seriesIds.Select(serieId => _context.Series.Single(m => m.Id == serieId)).ToList();
-
-            var recommendedList = recommendedDataIds.Select(bookId => _context.Series.Single(m => m.Id == bookId)).ToList();
-
-            var result = new List<SeriesIndexViewModel>();
-
-            foreach (var item in recommendedList)
-            {
-                var newItem = Mapper.Map<Series, SeriesIndexViewModel>(item);
-
-                newItem.Recommended = true;
-                newItem.RecommenderName = recommendedData.Single(x => x.Key == item.Id).Value;
-
-                result.Add(newItem);
-            }
-            
-            foreach (var item in list)
-            {
-                var newItem = Mapper.Map<Series, SeriesIndexViewModel>(item);
-
-                newItem.Recommended = false;
-
-                result.Add(newItem);
-            }
-
-            return result;
-        }
-        
         public ActionResult Index()
         {
-            var userId = User.Identity.GetUserId();
-            
+            var userData = base.GetUserData();
+
+            var booksList = base.GetEntities<Book>(userData.UserId);
+            var moviesList = base.GetEntities<Movie>(userData.UserId);
+            var gamesList = base.GetEntities<Game>(userData.UserId);
+
             var view = new UserProfileViewModel()
             {
-                BooksList = GetUserBooks(userId),
-                BookGenres = _context.BookGenres.ToList(),
-                MoviesList = GetUserMovies(userId),
-                GamesList = GetUserGames(userId),
-                SeriesList = GetUserSeries(userId)
+                BooksList = MapEntitiesToIndexViewModels<Book, BookIndexViewModel>(booksList),
+                MoviesList = MapEntitiesToIndexViewModels<Movie, MovieIndexViewModel>(moviesList),
+                GamesList = MapEntitiesToIndexViewModels<Game, GameIndexViewModel>(gamesList)
             };
 
             return View(view);
         }
-        
+
+        public EmptyResult AddScore(int id, int elementTypeNumber, short score)
+        {
+            var user = GetUserData();
+            var elementType = (ElementType)elementTypeNumber;
+
+            var entityScore = user.Scores.FirstOrDefault(e => e.EntityId == id && e.ElementType == elementType);
+            var entity = GetEntity(id, elementType, user.UserId);
+
+            if (entity == null)
+                return null;
+
+            if (entityScore != null)
+            {
+                entity.AverageScore = ((entity.AverageScore * entity.NumberOfVoters) - entityScore.Value + score) / entity.NumberOfVoters;
+                entityScore.Value = score;
+            }
+            else
+            {
+                user.Scores.Add(new Score()
+                {
+                    EntityId = id,
+                    UserId = user.Id,
+                    Value = score,
+                    ElementType = elementType
+                });
+
+                _context.Entry(user).State = EntityState.Modified;
+                entity.NumberOfVoters++;
+                entity.AverageScore = ((entity.AverageScore * (entity.NumberOfVoters - 1)) + score) / entity.NumberOfVoters;
+            }
+
+            _context.Entry(entity).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return new EmptyResult();
+        }
+
+        public ActionResult AddComment(int id, ElementType elementType, string CommentData)
+        {
+            if (String.IsNullOrWhiteSpace(CommentData))
+                TempData.Add("fail", "You need to write something...");
+            else if (_context.Books.SingleOrDefault(x => x.Id == id) == null)
+                TempData.Add("fail", "No book with this id");
+            else
+            {
+                var entity = GetEntity(id, elementType, null);
+                var userName = GetUserData();
+
+                entity.Comments.Add(new Comment(userName.Email, CommentData)
+                {
+                    ElementType = elementType
+                });
+
+                _context.SaveChanges();
+
+                TempData.Add("success", "Your comment was added");
+            }
+
+            return RedirectToAction(string.Format("Details/{0}", id), System.Enum.GetName(typeof(ElementType), elementType).ToString());
+        }
+
+        /*
         public ActionResult SendTicket(UserTicketViewModel form)
         {
             if (!ModelState.IsValid)
@@ -227,7 +136,7 @@ namespace MyBookList.Controllers
 
             var ticket = new Ticket()
             {
-                SendingUserName = User.Identity.GetUserName(),
+                UserId = base.GetUserData().UserId,
                 TicketBody = form.TicketBody,
                 TicketTitle = form.TicketTitle,
                 TimeSend = DateTime.Now.Date
@@ -241,242 +150,66 @@ namespace MyBookList.Controllers
 
             return RedirectToAction("Index");
         }
-        
-        public ActionResult AddBookToUserBase(int id)
+        */
+
+        public ActionResult AddEntityToUserBase(int id, ElementType elementType)
         {
-            var currentUserId = User.Identity.GetUserId();
+            var user = GetUserData();
+            var entity = GetEntity(id, elementType, null);
 
-            var book = new UserBooksList()
+            if (user.Entities.Any(x => x.Id == id && x.ElementType == elementType))
             {
-                UserId = currentUserId,
-                BookId = id
-            };
+                user.Entities.Add(entity);
 
-
-            if (!_context.UserBooksLists.Any(m => m.UserId == currentUserId && m.BookId == id))
-            {
-                _context.UserBooksLists.Add(book);
                 _context.SaveChanges();
-                TempData.Add("success", "Book Added to your books list");
 
-                return RedirectToAction("Details/" + id, "Books");
+                TempData.Add("success", "Entity added to your base");
             }
             else
-            {
-                var item = _context.UserBooksLists.Single(m => m.UserId == currentUserId && m.BookId == id);
+                TempData.Add("fail", "Entity already in you base");
 
-                item.Reccomended = false;
-                item.RecommendingUserName = null;
-
-                _context.SaveChanges();
-
-                TempData.Add("success", "Book Added to your series list");
-
-                return RedirectToAction("index", "UserProfile");
-            }
+            return RedirectToAction(string.Format("Details/{0}", id), System.Enum.GetName(typeof(ElementType), elementType).ToString());
         }
-        
-        public ActionResult AddMovieToUserBase(int id)
+
+        public ActionResult DeleteEntityFromUserBase(int id, ElementType elementType)
         {
-            var currentUserId = User.Identity.GetUserId();
+            var user = GetUserData();
+            var entity = GetEntity(id, elementType, null);
 
-            var movie = new UserMoviesList()
+            if (user.Entities.Any(x => x.Id == id && x.ElementType == elementType))
             {
-                UserId = currentUserId,
-                MovieId = id
-            };
+                user.Entities.Remove(entity);
 
-            if (!_context.UserMoviesLists.Any(m => m.UserId == currentUserId && m.MovieId == id))
-            {
-                _context.UserMoviesLists.Add(movie);
                 _context.SaveChanges();
-                TempData.Add("success", "Movie Added to your movies list");
 
-                return RedirectToAction("Details/" + id, "Movies");
+                TempData.Add("success", "Entity deleted from your base");
             }
             else
-            {
-                var item = _context.UserMoviesLists.Single(m => m.UserId == currentUserId && m.MovieId == id);
+                TempData.Add("fail", "Something went wrong");
 
-                item.Reccomended = false;
-                item.RecommendingUserName = null;
-
-                _context.SaveChanges();
-
-                TempData.Add("success", "Movie Added to your movies list");
-
-                return RedirectToAction("index", "UserProfile");
-            }
+            return RedirectToAction(string.Format("Details/{0}", id), System.Enum.GetName(typeof(ElementType), elementType).ToString());
         }
         
-        public ActionResult AddGameToUserBase(int id)
+        public ActionResult Recommend(string userName, Recommend model)
         {
-            var currentUserId = User.Identity.GetUserId();
+            var targetUser = GetUserDataByEmail(userName);
 
-            var game = new UserGamesList()
+            if (string.IsNullOrEmpty(userName) || targetUser == null)
             {
-                UserId = currentUserId,
-                GameId = id
-            };
+                TempData.Add("fail", "Wrong user email");
 
-            if (!_context.UserGamesLists.Any(m => m.UserId == currentUserId && m.GameId == id))
-            {
-                _context.UserGamesLists.Add(game);
-                _context.SaveChanges();
-                TempData.Add("success", "Game Added to your games list");
-
-                return RedirectToAction("Details/" + id, "Games");
+                return null;
             }
-            else
-            {
-                var item = _context.UserGamesLists.Single(m => m.UserId == currentUserId && m.GameId == id);
 
-                item.Reccomended = false;
-                item.RecommendingUserName = null;
+            var user = GetUserData();
 
-                _context.SaveChanges();
+            model.FromUserEmail = user.Email;
 
-                TempData.Add("success", "Game Added to your series list");
-
-                return RedirectToAction("index", "UserProfile");
-            }
-        }
-        
-        public ActionResult AddSeriesToUserBase(int id)
-        {
-            var currentUserId = User.Identity.GetUserId();
-
-            var series = new UserSeriesList()
-            {
-                UserId = currentUserId,
-                SeriesId = id
-            };
-            
-            if (!_context.UserSeriesLists.Any(m => m.UserId == currentUserId && m.SeriesId == id))
-            {
-                _context.UserSeriesLists.Add(series);
-                _context.SaveChanges();
-                TempData.Add("success", "Series Added to your series list");
-
-                return RedirectToAction("Details/" + id, "Series");
-            }
-            else
-            {
-                var item = _context.UserSeriesLists.Single(m => m.UserId == currentUserId && m.SeriesId == id);
-
-                item.Reccomended = false;
-                item.RecommendingUserName = null;
-
-                _context.SaveChanges();
-
-                TempData.Add("success", "Series Added to your series list");
-
-                return RedirectToAction("index", "UserProfile");
-            }
-        }
-
-        public ActionResult Delete(int id,string modelType)
-        {
-            var userId = User.Identity.GetUserId();
-
-            if (modelType == "Book")
-            {
-                var book = _context.UserBooksLists.Single(x => x.UserId == userId && x.BookId == id);
-                
-                _context.UserBooksLists.Remove(book);
-                TempData.Add("success", "Book deleted from your list");
-            }
-            else if (modelType == "Movie")
-            {
-                var movie = _context.UserMoviesLists.Single(x => x.UserId == userId && x.MovieId == id);
-
-                _context.UserMoviesLists.Remove(movie);
-                TempData.Add("success", "Movie deleted from your list");
-            }
-            else if (modelType == "Game")
-            {
-                var game = _context.UserGamesLists.Single(x => x.UserId == userId && x.GameId == id);
-
-                _context.UserGamesLists.Remove(game);
-                TempData.Add("success", "Game deleted from your list");
-            }
-            else if (modelType == "Series")
-            {
-                var series = _context.UserSeriesLists.Single(x => x.UserId == userId && x.SeriesId == id);
-
-                _context.UserSeriesLists.Remove(series);
-                TempData.Add("success", "Series deleted from your list");
-            }
+            targetUser.Reccomendations.Add(model);
 
             _context.SaveChanges();
 
-
-            return RedirectToAction("Index", "UserProfile");
-        }
-
-        public ActionResult Recommend(int id,string type,string userName)
-        {
-            if(userName.Length == 0 || !_context.Users.Any(m => m.UserName == userName))
-            {
-                TempData.Add("fail", "There is no user with " + userName + " nick");
-                return RedirectToAction("Index", "UserProfile");
-            }
-
-            var target = _context.Users.Single(m => m.UserName == userName);
-            
-            switch (type)
-            {
-                case "Book":
-                    if (_context.UserBooksLists.Any(x => x.BookId == id && x.UserId == target.Id))
-                    {
-                        TempData.Add("error", userName + " already have this book in his base");
-                        break;
-                    }
-                    else
-                    {
-                        _context.UserBooksLists.Add(new UserBooksList() { BookId = id, UserId = target.Id, Reccomended = true, RecommendingUserName = User.Identity.GetUserName() });
-                        TempData.Add("success", "Book successfully recomended to " + userName);
-                        break;
-                    }
-                case "Game":
-                    if (_context.UserGamesLists.Any(x => x.GameId == id && x.UserId == target.Id))
-                    {
-                        TempData.Add("error", userName + " already have this game in his base");
-                        break;
-                    }
-                    else
-                    {
-                        _context.UserGamesLists.Add(new UserGamesList() { GameId = id, UserId = target.Id, Reccomended = true, RecommendingUserName = User.Identity.GetUserName() });
-                        TempData.Add("success", "Game successfully recomended to " + userName);
-                        break;
-                    }
-                case "Movie":
-                    if (_context.UserMoviesLists.Any(x => x.MovieId == id && x.UserId == target.Id))
-                    {
-                        TempData.Add("error", userName + " already have this movie in his base");
-                        break;
-                    }
-                    else
-                    {
-                        _context.UserMoviesLists.Add(new UserMoviesList() { MovieId = id, UserId = target.Id, Reccomended = true, RecommendingUserName = User.Identity.GetUserName() });
-                        TempData.Add("success", "Movie successfully recomended to " + userName);
-                        break;
-                    }
-                case "Series":
-                    if (_context.UserSeriesLists.Any(x => x.SeriesId == id && x.UserId == target.Id))
-                    {
-                        TempData.Add("error", userName + " already have this series in his base");
-                        break;
-                    }
-                    else
-                    {
-                        _context.UserSeriesLists.Add(new UserSeriesList() { SeriesId = id, UserId = target.Id, Reccomended = true, RecommendingUserName = User.Identity.GetUserName() });
-                        TempData.Add("success", "Series successfully recomended to " + userName);
-                        break;
-                    }
-            }
-
-            _context.SaveChanges();
+            TempData.Add("success", System.Enum.GetName(typeof(ElementType), model.ElementType) + " sucessfully recommended");
 
             return RedirectToAction("Index", "UserProfile");
         }

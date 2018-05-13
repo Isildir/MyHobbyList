@@ -1,12 +1,12 @@
-﻿using MyBookList.Models;
-using MyBookList.ViewModels;
+﻿using MyHobbyList.Models;
+using MyHobbyList.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace MyBookList.Controllers
+namespace MyHobbyList.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
@@ -17,7 +17,7 @@ namespace MyBookList.Controllers
         {
             _context = new ApplicationDbContext();
         }
-        
+        /*
         public ActionResult Index()
         {
             var ticketsList = _context.AdminTickets.ToList();
@@ -112,6 +112,6 @@ namespace MyBookList.Controllers
 
             TempData.Add("success", "Ticket deleted");
             return RedirectToAction("Index");
-        }
+        }*/
     }
 }

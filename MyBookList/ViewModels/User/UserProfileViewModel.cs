@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using MyBookList.Models;
+using MyHobbyList.Models;
 
-namespace MyBookList.ViewModels
+namespace MyHobbyList.ViewModels
 {
     public class UserProfileViewModel
     {
@@ -13,10 +13,5 @@ namespace MyBookList.ViewModels
         public IEnumerable<MovieIndexViewModel> MoviesList { get; set; }
 
         public IEnumerable<GameIndexViewModel> GamesList { get; set; }
-
-        public IEnumerable<SeriesIndexViewModel> SeriesList { get; set; }
-
-        public BookDetailsViewModel Book { get; set; }
-        public IEnumerable<BookGenre> BookGenres { get; set; }
     }
 }

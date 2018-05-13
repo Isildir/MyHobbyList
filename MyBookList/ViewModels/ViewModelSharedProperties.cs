@@ -1,16 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace MyBookList.ViewModels
+namespace MyHobbyList.ViewModels
 {
     public class ViewModelSharedProperties
     {
-        public bool CanEdit { get; set; } = false;
+        public int Id { get; set; }
 
-        public bool InUse { get; set; } = false;
+        public string Title { get; set; }
 
-        public bool IsAdded { get; set; } = true;
+        public DateTime ReleaseDate { get; set; }
+
+        public string GenreName { get; set; }
+
+        public int ImageId { get; set; }
+
+        public string Description { get; set; }
     }
 }

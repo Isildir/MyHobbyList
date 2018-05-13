@@ -1,0 +1,19 @@
+﻿@model MyHobbyList.Models.Recommend
+@using (Html.BeginForm("Recommend", "UserProfile", FormMethod.Post))
+{
+    @Html.ValidationSummary()
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.TextBox("userName", null, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Message)
+        @Html.TextBoxFor(m => m.Message, new { @class = "form-control" })
+    </div>
+    @Html.HiddenFor(m => m.EntityId);
+@*
+    @Html.HiddenFor(m => m.EntityId, (int) ViewBag.EntityId);
+    @Html.HiddenFor(x => x.ElementType, (MyHobbyList.Models.ElementType)ViewBag.ElementType)
+*@
+    <button type="submit" class="button-for-modal">Send</button>
+}

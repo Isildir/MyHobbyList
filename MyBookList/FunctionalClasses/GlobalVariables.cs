@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MyBookList.FunctionalClasses
+namespace MyHobbyList.FunctionalClasses
 {
     public static class GlobalVariables
     {

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace MyBookList.ViewModels.User
+namespace MyHobbyList.ViewModels.User
 {
     public class UserTicketViewModel
     {

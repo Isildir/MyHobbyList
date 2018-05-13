@@ -13,10 +13,9 @@
             <ul class="nav navbar-nav">
                 @if (this.User.IsInRole("Admin")) { <li>@Html.ActionLink("Admin Panel", "Index", "Admin")</li> }
                 <li>@Html.ActionLink("My List", "Index", "UserProfile")</li>
-                <li>@Html.ActionLink("Books List", "Index", "Books")</li>
-                <li>@Html.ActionLink("Movies List", "Index", "Movies")</li>
-                <li>@Html.ActionLink("Games List", "Index", "Games")</li>
-                <li>@Html.ActionLink("Series List", "Index", "Series")</li>
+                <li>@Html.ActionLink("Books List", "Index", "Book")</li>
+                <li>@Html.ActionLink("Movies List", "Index", "Movie")</li>
+                <li>@Html.ActionLink("Games List", "Index", "Game")</li>
                 <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
             </ul>
             @Html.Partial("_LoginPartial")

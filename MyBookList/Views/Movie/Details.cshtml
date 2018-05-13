@@ -1,0 +1,214 @@
+﻿@model MyHobbyList.ViewModels.MovieDetailsViewModel
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var user = Request.IsAuthenticated;
+
+    var admin = this.User.IsInRole("Admin");
+}
+<link rel="stylesheet" type="text/css" href="~/Content/styles/DetailsPage.css" />
+<link rel="stylesheet" type="text/css" href="~/Content/styles/Modals.css" />
+<table id="table-main">
+    <tbody>
+        <tr>
+            <td id="first-col">
+                <img src='@Url.Action("ShowFull", "Image", new { id = Model.ImageId})' />
+            </td>
+            <td>
+                <ul id="data-list">
+                    <li id="title">@Model.Title</li>
+                    <li><p>Author:</p>@Model.Director</li>
+                    <li><p>Genre:</p>@Model.GenreName</li>
+                    <li><p>Release Date:</p>@Model.ReleaseDate.Day/@Model.ReleaseDate.Month/@Model.ReleaseDate.Year</li>
+                </ul>
+            </td>
+            <td id="desc-col">
+                <p>Description:</p>
+                @if (!String.IsNullOrWhiteSpace(Model.Description))
+                {
+                    <p>@Model.Description</p>
+                }
+                @if (user)
+                {
+                    <ul>
+                        @for (var i = 1; i <= 10; i++)
+                        {
+                            var num = "" + i;
+                            if (Model.YourScore >= i)
+                            {
+                                <li><img id="@num" src="~/Content/Images//redstar.png" /></li>
+                            }
+                            else
+                            {
+                                <li><img id="@num" src="~/Content/Images//graystar.png" /></li>
+                            }
+                        }
+                    </ul>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>
+<table id="button-table">
+    <tr>
+        @if (user)
+        {
+            <th>@Html.ActionLink("Add to my Base", "AddEntityToUserBase", "UserProfile", new { id = Model.Id, elementType = MyHobbyList.Models.ElementType.Movie }, new { @class = "btn btn-primary" })</th>
+            <th id="button-unactive" class="btn btn-primary">Already Added</th>
+            <th><button id="btnShowModal" type="button" class="btn btn-primary">Edit Movie</button></th>
+            <th>@Html.ActionLink("Delete this Movie", "Delete", null, new { id = Model.Id }, new { @class = "btn btn-primary" })</th>
+            <th><button id="RecMovie" type="button" class="btn btn-primary">Recommend</button></th>
+        }
+    </tr>
+</table>
+@if (Model.Comments != null)
+{
+    <div id="comment-div">
+        @foreach (var item in Model.Comments)
+        {
+            <div id="comment-desc">
+                <p>"@item.CommentData"</p>
+                <div id="comment-user-data">
+                    <p>@item.UserLogin</p>
+                    <p>@item.DateAdded.Day/@item.DateAdded.Month/@item.DateAdded.Year</p>
+                </div>
+            </div>
+        }
+    </div>
+}
+<h2> Leave your comment</h2>
+@using (Html.BeginForm("AddComment", "UserProfile"))
+{
+    @Html.ValidationSummary()
+    <div>
+        @Html.TextArea("CommentData", null, new { @class = "comment-area" })
+    </div>
+
+    @Html.Hidden("id", new { id = Model.Id });
+    @Html.Hidden("elementType", MyHobbyList.Models.ElementType.Movie);
+
+    <button id="comment-submit" type="submit">Send</button>
+}
+@if (Model.SimiliarEntities.Count() >= 6)
+{
+    <h2>Similiar Movies</h2>
+    <div id="similiar" class="row">
+        @foreach (var item in Model.SimiliarEntities)
+        {
+            <div class="col-sm-2">
+                <img src='@Url.Action("ShowFull", "Image", new { id = item.ImageId })' />
+                @Html.ActionLink(item.Title, "Details", "Movie", new { id = item.Id }, null)
+            </div>
+        }
+    </div>
+}
+@if (user)
+{
+    <div class="modal fade" id="AccountEditModal" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
+        <div class="modal-dialog modalAccountEdit" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3><strong>Edit this book<span class="accountname"></span></strong></h3>
+                </div>
+                <div class="modal-body" id="form-container">
+                    @Html.Action("Edit", "Movie", new { id = Model.Id })
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="SendRecommend" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
+        <div class="modal-dialog modalAccountEdit" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3><strong>Enter your friend nick<span class="accountname"></span></strong></h3>
+                </div>
+                <div class="modal-body" id="form-container">
+                    @Html.Partial("_RecommendMovie")
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            var currScore = @Model.YourScore;
+
+            $('#AccountEditModal').on('shown.bs.modal', function () {
+                $('#myInput').focus()
+            })
+
+            $("#btnShowModal").click(function () {
+                $("#AccountEditModal").modal('show');
+            });
+
+            $('#SendRecommend').on('shown.bs.modal', function () {
+                $('#myInput').focus()
+            })
+
+            $("#RecMovie").click(function () {
+                $("#SendRecommend").modal('show');
+            });
+
+            $("#AccountEditModal,#SendRecommend").on("submit", "#form-accountprofileedit", function (e) {
+                e.preventDefault();
+
+                var form = $(this);
+                $.ajax({
+                    url: form.attr("action"),
+                    method: form.attr("method"),
+                    data: form.serialize(),
+                    success: function (partialResult) {
+                        $("#formContent").html(partialResult);
+                    }
+                });
+            });
+
+            //score item function
+            $("#1,#2,#3,#4,#5,#6,#7,#8,#9,#10").click(function (e) {
+
+                e.preventDefault();
+
+                var number = parseInt(e.target.id);
+
+                $.ajax({
+                    url:'@Url.Action("AddScore", "UserProfile")',
+                    data: { id: @Model.Id, score: number, elementTypeNumber: @((int)MyHobbyList.Models.ElementType.Movie) },
+                    success: function ()
+                    {
+                        currScore = number;
+                        changeStar(number);
+                    }
+                });
+            });
+
+            $("#1,#2,#3,#4,#5,#6,#7,#8,#9,#10").hover(function (e) {
+                var number = parseInt(e.target.id);
+                changeStar(number);
+            });
+
+            $("#1,#2,#3,#4,#5,#6,#7,#8,#9,#10").mouseleave(function (e) {
+                var number = currScore;
+                changeStar(number);
+
+            });
+
+            function changeStar(number) {
+                for (var i = 1; i <= 10; i++) {
+                    if (i <= number) {
+                        $("#" + i).attr('src', '/Content/Images//redstar.png');
+                    }
+                    else {
+                        $("#" + i).attr('src', '/Content/Images//graystar.png');
+                    }
+                }
+            }
+        });
+    </script>
+}

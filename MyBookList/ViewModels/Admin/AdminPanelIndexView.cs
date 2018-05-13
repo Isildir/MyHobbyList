@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MyBookList.ViewModels
+namespace MyHobbyList.ViewModels
 {
     public class AdminPanelIndexView
     {

@@ -9,9 +9,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using MyBookList.Models;
+using MyHobbyList.Models;
 
-namespace MyBookList.Controllers
+namespace MyHobbyList.Controllers
 {
     [Authorize]
     public class AccountController : Controller
@@ -161,6 +161,14 @@ namespace MyBookList.Controllers
 
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
+                    var userId = SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
+
+                    ApplicationDbContext _context = new ApplicationDbContext();
+
+                    _context.UserDatas.Add(new UserData(userId, model.Email));
+
+                    await _context.SaveChangesAsync();
+
                     // Dodawanie nowych rol i przypisywanie
                     /*
                     var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
@@ -168,7 +176,6 @@ namespace MyBookList.Controllers
                     await roleManager.CreateAsync(new IdentityRole("RoleName"));
                     await UserManager.AddToRoleAsync(user.Id, "RoleName");
                     */
-
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link

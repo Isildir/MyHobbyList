@@ -1,8 +1,8 @@
-﻿@model MyBookList.ViewModels.MovieFormViewModel
-
-@using (Html.BeginForm("Update", "Movies", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+﻿@model MyHobbyList.ViewModels.MovieFormViewModel
+@using (Html.BeginForm("Update", "Movie", FormMethod.Post, new { @enctype = "multipart/form-data" }))
 {
     @Html.ValidationSummary()
+    @Html.AntiForgeryToken()
     <div class="form-group">
         @Html.LabelFor(m => m.Title)
         @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
@@ -15,17 +15,17 @@
 
     <div class="form-group">
         @Html.LabelFor(m => m.ReleaseDate)
-        @Html.TextBoxFor(m => m.ReleaseDate, "{0}:d MMM yyyy", new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.ReleaseDate, "{0:d MMM yyyy}", new { @class = "form-control" })
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(m => m.MovieGenreId)
-        @Html.DropDownListFor(m => m.MovieGenreId, new SelectList(Model.MovieGenres, "Id", "Name"), "Select Genre", new { @class = "form-control" })
+        @Html.LabelFor(m => m.GenreId)
+        @Html.DropDownListFor(m => m.GenreId, MyHobbyList.Controllers.EntityController.GetGenresStatic(MyHobbyList.Models.ElementType.Movie), new { @class = "form-control" })
     </div>
 
     <div class="form-group">
         @Html.LabelFor(m => m.Description)
-        @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+        @Html.TextAreaFor(m => m.Description, new { maxlength = "799", @class = "form-control" })
     </div>
 
     <div class="form-group">

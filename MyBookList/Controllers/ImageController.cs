@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MyBookList.Models;
+using MyHobbyList.Models;
 
-namespace MyBookList.Controllers
+namespace MyHobbyList.Controllers
 {
     [AllowAnonymous]
     public class ImageController : Controller
@@ -20,16 +20,16 @@ namespace MyBookList.Controllers
 
         public ActionResult ShowFull(int id)
         {
-            var image = _context.Images.Single(x => x.Id == id);
+            var image = _context.Files.Single(x => x.Id == id);
 
-            return File(image.FullImage, image.ImageMimeType.ToString());
+            return File(image.Content, image.ImageMimeType.ToString());
         }
 
         public ActionResult ShowMini(int id)
         {
-            var image = _context.Images.Single(x => x.Id == id);
+            var image = _context.Files.Single(x => x.Id == id);
 
-            return File(image.ThumbnailImage, image.ImageMimeType.ToString());
+            return File(image.AdditionalData, image.ImageMimeType.ToString());
         }
     }
 }

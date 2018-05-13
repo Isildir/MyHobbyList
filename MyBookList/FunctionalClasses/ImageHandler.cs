@@ -4,9 +4,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
-using MyBookList.Models;
+using MyHobbyList.Models;
 
-namespace MyBookList.FunctionalClasses
+namespace MyHobbyList.FunctionalClasses
 {
     public class ImageHandler
     {
@@ -23,13 +23,13 @@ namespace MyBookList.FunctionalClasses
 
             if (UploadImage != null)
             {
-                Models.Image image = new Models.Image();
-                
-                image.FullImage = ReduceSize(UploadImage.InputStream, 210, 300);
-                image.ThumbnailImage = ReduceSize(UploadImage.InputStream, 70, 100);
+                Models.File image = new Models.File();
+
+                image.Content = ReduceSize(UploadImage.InputStream, 210, 300);
+                image.AdditionalData = ReduceSize(UploadImage.InputStream, 70, 100);
                 image.ImageMimeType = UploadImage.ContentLength;
-                
-                _context.Images.Add(image);
+
+                _context.Files.Add(image);
                 _context.SaveChanges();
 
                 imageId = image.Id;

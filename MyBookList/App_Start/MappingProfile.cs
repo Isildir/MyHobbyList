@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
-using MyBookList.Models;
-using MyBookList.ViewModels;
+using MyHobbyList.Models;
+using MyHobbyList.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MyBookList.App_Start
+namespace MyHobbyList.App_Start
 {
     public class MappingProfile : Profile
     {
         public MappingProfile()
         {
-            Mapper.CreateMap<BookIndexViewModel, Book>();
+            Mapper.CreateMap<BookIndexViewModel, Book>();//.ForMember(x => x.Comments, opt => opt.Ignore());
             Mapper.CreateMap<Book, BookIndexViewModel>();
             Mapper.CreateMap<BookDetailsViewModel, Book>();
             Mapper.CreateMap<Book, BookDetailsViewModel>();
@@ -25,20 +25,15 @@ namespace MyBookList.App_Start
             Mapper.CreateMap<Movie, MovieDetailsViewModel>();
             Mapper.CreateMap<MovieFormViewModel, Movie>();
             Mapper.CreateMap<Movie, MovieFormViewModel>();
-            
+
             Mapper.CreateMap<GameIndexViewModel, Game>();
             Mapper.CreateMap<Game, GameIndexViewModel>();
-            Mapper.CreateMap<GamesDetailsViewModel, Game>();
-            Mapper.CreateMap<Game, GamesDetailsViewModel>();
+            Mapper.CreateMap<GameDetailsViewModel, Game>();
+            Mapper.CreateMap<Game, GameDetailsViewModel>();
             Mapper.CreateMap<GameFormViewModel, Game>();
             Mapper.CreateMap<Game, GameFormViewModel>();
-            
-            Mapper.CreateMap<SeriesIndexViewModel, Series>();
-            Mapper.CreateMap<Series,SeriesIndexViewModel>();
-            Mapper.CreateMap<SeriesDetailsViewModel, Series>();
-            Mapper.CreateMap<Series, SeriesDetailsViewModel>();
-            Mapper.CreateMap<SeriesFormViewModel, Series>();
-            Mapper.CreateMap<Series, SeriesFormViewModel>();
+
+            Mapper.CreateMap<Comment, CommentViewModel>();
         }
     }
 }

@@ -6,9 +6,9 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using MyBookList.Models;
+using MyHobbyList.Models;
 
-namespace MyBookList.Controllers
+namespace MyHobbyList.Controllers
 {
     [Authorize]
     public class ManageController : Controller

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MyBookList.ViewModels.AdminPanelBannedView>
+﻿@model IEnumerable<MyHobbyList.ViewModels.AdminPanelBannedView>
 @{
     ViewBag.Title = "BannedUsersList";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -41,16 +41,6 @@
 </div>
 
 @section Scripts {
-
-    @if (TempData.ContainsKey("success"))
-    {
-        <script>toastr.success("@TempData.SingleOrDefault(x => x.Key == "success").Value")</script>
-    }
-    else if (TempData.ContainsKey("fail"))
-    {
-        <script>toastr.error("@TempData.SingleOrDefault(x => x.Key == "fail").Value")</script>
-    }
-
     <script>
         $(document).ready(function () {
 

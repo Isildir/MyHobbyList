@@ -195,268 +195,52 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\BooksController.cs" />
-    <Compile Include="Controllers\GamesController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BookController.cs" />
+    <Compile Include="Controllers\EntityController.cs" />
+    <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\MoviesController.cs" />
-    <Compile Include="Controllers\SeriesController.cs" />
+    <Compile Include="Controllers\MovieController.cs" />
     <Compile Include="Controllers\UserProfileController.cs" />
     <Compile Include="FunctionalClasses\GlobalVariables.cs" />
     <Compile Include="FunctionalClasses\ImageHandler.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201708210940118_AddingModelsToDb.cs" />
-    <Compile Include="Migrations\201708210940118_AddingModelsToDb.Designer.cs">
-      <DependentUpon>201708210940118_AddingModelsToDb.cs</DependentUpon>
+    <Compile Include="Migrations\201805011608182_modelRework.cs" />
+    <Compile Include="Migrations\201805011608182_modelRework.Designer.cs">
+      <DependentUpon>201805011608182_modelRework.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201708210953254_PopulationgGenresList.cs" />
-    <Compile Include="Migrations\201708210953254_PopulationgGenresList.Designer.cs">
-      <DependentUpon>201708210953254_PopulationgGenresList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708211319183_PopulatingBooksTableToTests.cs" />
-    <Compile Include="Migrations\201708211319183_PopulatingBooksTableToTests.Designer.cs">
-      <DependentUpon>201708211319183_PopulatingBooksTableToTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708211404164_ChangesInBookModel.cs" />
-    <Compile Include="Migrations\201708211404164_ChangesInBookModel.Designer.cs">
-      <DependentUpon>201708211404164_ChangesInBookModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708212123135_PopulatingGamesTableToTests.cs" />
-    <Compile Include="Migrations\201708212123135_PopulatingGamesTableToTests.Designer.cs">
-      <DependentUpon>201708212123135_PopulatingGamesTableToTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708221504469_changingBookModel.cs" />
-    <Compile Include="Migrations\201708221504469_changingBookModel.Designer.cs">
-      <DependentUpon>201708221504469_changingBookModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708221616176_changingOthersModel.cs" />
-    <Compile Include="Migrations\201708221616176_changingOthersModel.Designer.cs">
-      <DependentUpon>201708221616176_changingOthersModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708221708250_changingOthersModel2.cs" />
-    <Compile Include="Migrations\201708221708250_changingOthersModel2.Designer.cs">
-      <DependentUpon>201708221708250_changingOthersModel2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708232224580_DeletingUserModel.cs" />
-    <Compile Include="Migrations\201708232224580_DeletingUserModel.Designer.cs">
-      <DependentUpon>201708232224580_DeletingUserModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708240956484_NewUsersDataManagementSystem.cs" />
-    <Compile Include="Migrations\201708240956484_NewUsersDataManagementSystem.Designer.cs">
-      <DependentUpon>201708240956484_NewUsersDataManagementSystem.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708241035279_TryingToUseUserIdAsaString.cs" />
-    <Compile Include="Migrations\201708241035279_TryingToUseUserIdAsaString.Designer.cs">
-      <DependentUpon>201708241035279_TryingToUseUserIdAsaString.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708241502404_TryingToUseUserIdAsaString2.cs" />
-    <Compile Include="Migrations\201708241502404_TryingToUseUserIdAsaString2.Designer.cs">
-      <DependentUpon>201708241502404_TryingToUseUserIdAsaString2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708251103241_AddUserIdToCreatedItems.cs" />
-    <Compile Include="Migrations\201708251103241_AddUserIdToCreatedItems.Designer.cs">
-      <DependentUpon>201708251103241_AddUserIdToCreatedItems.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708261533167_testImage.cs" />
-    <Compile Include="Migrations\201708261533167_testImage.Designer.cs">
-      <DependentUpon>201708261533167_testImage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708261606173_testImage2.cs" />
-    <Compile Include="Migrations\201708261606173_testImage2.Designer.cs">
-      <DependentUpon>201708261606173_testImage2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708261709327_testImage3.cs" />
-    <Compile Include="Migrations\201708261709327_testImage3.Designer.cs">
-      <DependentUpon>201708261709327_testImage3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708261728031_testImage4.cs" />
-    <Compile Include="Migrations\201708261728031_testImage4.Designer.cs">
-      <DependentUpon>201708261728031_testImage4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708261822532_testImage5.cs" />
-    <Compile Include="Migrations\201708261822532_testImage5.Designer.cs">
-      <DependentUpon>201708261822532_testImage5.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708271818209_date.cs" />
-    <Compile Include="Migrations\201708271818209_date.Designer.cs">
-      <DependentUpon>201708271818209_date.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708281517305_SeriesGenreEdit.cs" />
-    <Compile Include="Migrations\201708281517305_SeriesGenreEdit.Designer.cs">
-      <DependentUpon>201708281517305_SeriesGenreEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708281520086_SeriesGenre2.cs" />
-    <Compile Include="Migrations\201708281520086_SeriesGenre2.Designer.cs">
-      <DependentUpon>201708281520086_SeriesGenre2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708281532407_SeriesGenrePopulating.cs" />
-    <Compile Include="Migrations\201708281532407_SeriesGenrePopulating.Designer.cs">
-      <DependentUpon>201708281532407_SeriesGenrePopulating.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708291628533_cleaning.cs" />
-    <Compile Include="Migrations\201708291628533_cleaning.Designer.cs">
-      <DependentUpon>201708291628533_cleaning.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708291645460_recommendationModel.cs" />
-    <Compile Include="Migrations\201708291645460_recommendationModel.Designer.cs">
-      <DependentUpon>201708291645460_recommendationModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708291659452_UpdatingUserItemsLists.cs" />
-    <Compile Include="Migrations\201708291659452_UpdatingUserItemsLists.Designer.cs">
-      <DependentUpon>201708291659452_UpdatingUserItemsLists.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709011901225_AddingTicketFeautureToDatabase.cs" />
-    <Compile Include="Migrations\201709011901225_AddingTicketFeautureToDatabase.Designer.cs">
-      <DependentUpon>201709011901225_AddingTicketFeautureToDatabase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709011915055_AddingBanUserAddItemPrivilageToDatabase.cs" />
-    <Compile Include="Migrations\201709011915055_AddingBanUserAddItemPrivilageToDatabase.Designer.cs">
-      <DependentUpon>201709011915055_AddingBanUserAddItemPrivilageToDatabase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709021123569_changingTicketVariables.cs" />
-    <Compile Include="Migrations\201709021123569_changingTicketVariables.Designer.cs">
-      <DependentUpon>201709021123569_changingTicketVariables.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709041715440_addAdminAccount.cs" />
-    <Compile Include="Migrations\201709041715440_addAdminAccount.Designer.cs">
-      <DependentUpon>201709041715440_addAdminAccount.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709111902341_wtf.cs" />
-    <Compile Include="Migrations\201709111902341_wtf.Designer.cs">
-      <DependentUpon>201709111902341_wtf.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709211721375_scoresForBooks.cs" />
-    <Compile Include="Migrations\201709211721375_scoresForBooks.Designer.cs">
-      <DependentUpon>201709211721375_scoresForBooks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709211932072_scoresForBooks2.cs" />
-    <Compile Include="Migrations\201709211932072_scoresForBooks2.Designer.cs">
-      <DependentUpon>201709211932072_scoresForBooks2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709211935523_scoresForBooks3.cs" />
-    <Compile Include="Migrations\201709211935523_scoresForBooks3.Designer.cs">
-      <DependentUpon>201709211935523_scoresForBooks3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709231644004_scoresToEveryone!.cs" />
-    <Compile Include="Migrations\201709231644004_scoresToEveryone!.Designer.cs">
-      <DependentUpon>201709231644004_scoresToEveryone!.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709231646094_scoresInItemModels.cs" />
-    <Compile Include="Migrations\201709231646094_scoresInItemModels.Designer.cs">
-      <DependentUpon>201709231646094_scoresInItemModels.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709281558216_TryToAddComments.cs" />
-    <Compile Include="Migrations\201709281558216_TryToAddComments.Designer.cs">
-      <DependentUpon>201709281558216_TryToAddComments.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709281829365_AddDataToComments.cs" />
-    <Compile Include="Migrations\201709281829365_AddDataToComments.Designer.cs">
-      <DependentUpon>201709281829365_AddDataToComments.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709291827543_comments.cs" />
-    <Compile Include="Migrations\201709291827543_comments.Designer.cs">
-      <DependentUpon>201709291827543_comments.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709291913112_RemoveCommentsForNow.cs" />
-    <Compile Include="Migrations\201709291913112_RemoveCommentsForNow.Designer.cs">
-      <DependentUpon>201709291913112_RemoveCommentsForNow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709300039315_CommentsForGames.cs" />
-    <Compile Include="Migrations\201709300039315_CommentsForGames.Designer.cs">
-      <DependentUpon>201709300039315_CommentsForGames.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709301500496_CommentsForEveryone.cs" />
-    <Compile Include="Migrations\201709301500496_CommentsForEveryone.Designer.cs">
-      <DependentUpon>201709301500496_CommentsForEveryone.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709301721006_test.cs" />
-    <Compile Include="Migrations\201709301721006_test.Designer.cs">
-      <DependentUpon>201709301721006_test.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709301902285_test2.cs" />
-    <Compile Include="Migrations\201709301902285_test2.Designer.cs">
-      <DependentUpon>201709301902285_test2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709301910299_test3.cs" />
-    <Compile Include="Migrations\201709301910299_test3.Designer.cs">
-      <DependentUpon>201709301910299_test3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709301938546_ReworkBookComments.cs" />
-    <Compile Include="Migrations\201709301938546_ReworkBookComments.Designer.cs">
-      <DependentUpon>201709301938546_ReworkBookComments.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709302043342_ReworkCommentForRest.cs" />
-    <Compile Include="Migrations\201709302043342_ReworkCommentForRest.Designer.cs">
-      <DependentUpon>201709302043342_ReworkCommentForRest.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709302116466_ReworkScoresForBooks.cs" />
-    <Compile Include="Migrations\201709302116466_ReworkScoresForBooks.Designer.cs">
-      <DependentUpon>201709302116466_ReworkScoresForBooks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201709302246148_ReworkScoresForRest.cs" />
-    <Compile Include="Migrations\201709302246148_ReworkScoresForRest.Designer.cs">
-      <DependentUpon>201709302246148_ReworkScoresForRest.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710031814465_Fix.cs" />
-    <Compile Include="Migrations\201710031814465_Fix.Designer.cs">
-      <DependentUpon>201710031814465_Fix.cs</DependentUpon>
+    <Compile Include="Migrations\201805081834488_check.cs" />
+    <Compile Include="Migrations\201805081834488_check.Designer.cs">
+      <DependentUpon>201805081834488_check.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Admin\Ticket.cs" />
-    <Compile Include="Models\Admin\BannedUser.cs" />
-    <Compile Include="Models\Books\BookComment.cs" />
-    <Compile Include="Models\Books\BookLikedBy.cs" />
-    <Compile Include="Models\ExtensionBook.cs" />
-    <Compile Include="Models\Games\GameComment.cs" />
-    <Compile Include="Models\Games\GameLikedBy.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\Image.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Books\Book.cs" />
-    <Compile Include="Models\Books\BookGenre.cs" />
-    <Compile Include="Models\Games\Game.cs" />
-    <Compile Include="Models\Games\GameGenre.cs" />
-    <Compile Include="Models\Movies\MovieLikedBy.cs" />
-    <Compile Include="Models\Movies\Movie.cs" />
-    <Compile Include="Models\Movies\MovieComment.cs" />
-    <Compile Include="Models\Movies\MovieGenre.cs" />
-    <Compile Include="Models\Serie\SeriesLikedBy.cs" />
-    <Compile Include="Models\Serie\Series.cs" />
-    <Compile Include="Models\Serie\SeriesComment.cs" />
-    <Compile Include="Models\Serie\SeriesGenre.cs" />
-    <Compile Include="Models\Books\BookScoreList.cs" />
-    <Compile Include="Models\Games\GameScoreList.cs" />
-    <Compile Include="Models\Movies\MovieScoreList.cs" />
-    <Compile Include="Models\Serie\SeriesScoreList.cs" />
-    <Compile Include="Models\User\UserBooksList.cs" />
-    <Compile Include="Models\User\UserGamesList.cs" />
-    <Compile Include="Models\User\UserMoviesList.cs" />
-    <Compile Include="Models\User\UserSeriesList.cs" />
+    <Compile Include="Models\Account\AccountViewModels.cs" />
+    <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\Context\IdentityModels.cs" />
+    <Compile Include="Models\Entity.cs" />
+    <Compile Include="Models\Enums.cs" />
+    <Compile Include="Models\File.cs" />
+    <Compile Include="Models\Account\ManageViewModels.cs" />
+    <Compile Include="Models\Genre.cs" />
+    <Compile Include="Models\Hobbys.cs" />
+    <Compile Include="Models\Recommend.cs" />
+    <Compile Include="Models\Score.cs" />
+    <Compile Include="Models\Ticket.cs" />
+    <Compile Include="Models\UserData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Admin\AdminPanelBannedView.cs" />
     <Compile Include="ViewModels\Admin\AdminPanelIndexView.cs" />
-    <Compile Include="ViewModels\Books\BookDetailsViewModel.cs" />
-    <Compile Include="ViewModels\Books\BookFormViewModel.cs" />
-    <Compile Include="ViewModels\Books\SimiliarBookMini.cs" />
-    <Compile Include="ViewModels\Games\GameFormViewModel.cs" />
-    <Compile Include="ViewModels\Books\BookIndexViewModel.cs" />
-    <Compile Include="ViewModels\Games\GameIndexViewModel.cs" />
-    <Compile Include="ViewModels\Games\GamesDetailsViewModel.cs" />
-    <Compile Include="ViewModels\Games\SimiliarGameMini.cs" />
-    <Compile Include="ViewModels\Movies\MovieDetailsViewModel.cs" />
-    <Compile Include="ViewModels\Movies\MovieFormViewModel.cs" />
-    <Compile Include="ViewModels\Movies\MovieIndexViewModel.cs" />
-    <Compile Include="ViewModels\Movies\SimiliarMovieMini.cs" />
-    <Compile Include="ViewModels\Series\SeriesDetailsViewModel.cs" />
-    <Compile Include="ViewModels\Series\SeriesFormViewModel.cs" />
-    <Compile Include="ViewModels\Series\SeriesIndexViewModel.cs" />
-    <Compile Include="ViewModels\Series\SimiliarSeriesMini.cs" />
-    <Compile Include="ViewModels\User\CommentViewModel.cs" />
+    <Compile Include="ViewModels\CommentViewModel.cs" />
+    <Compile Include="ViewModels\EntityDetails.cs" />
+    <Compile Include="ViewModels\EntityForms.cs" />
+    <Compile Include="ViewModels\EntityIndex.cs" />
+    <Compile Include="ViewModels\EntityModelsParentClasses.cs" />
+    <Compile Include="ViewModels\SimiliarEntityMini.cs" />
     <Compile Include="ViewModels\User\UserProfileViewModel.cs" />
     <Compile Include="ViewModels\User\UserTicketViewModel.cs" />
     <Compile Include="ViewModels\ViewModelSharedProperties.cs" />
@@ -735,15 +519,13 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Books\Index.cshtml" />
-    <Content Include="Views\Games\Index.cshtml" />
-    <Content Include="Views\Movies\Index.cshtml" />
-    <Content Include="Views\Series\Index.cshtml" />
-    <Content Include="Views\Books\Details.cshtml" />
-    <Content Include="Views\Games\Details.cshtml" />
+    <Content Include="Views\Book\Index.cshtml" />
+    <Content Include="Views\Game\Index.cshtml" />
+    <Content Include="Views\Movie\Index.cshtml" />
+    <Content Include="Views\Book\Details.cshtml" />
+    <Content Include="Views\Game\Details.cshtml" />
     <Content Include="Views\Shared\_NavBar.cshtml" />
-    <Content Include="Views\Movies\Details.cshtml" />
-    <Content Include="Views\Series\Details.cshtml" />
+    <Content Include="Views\Movie\Details.cshtml" />
     <Content Include="Views\UserProfile\Index.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\TicketDetails.cshtml" />
@@ -751,17 +533,17 @@
     <Content Include="Views\Shared\_BookFormModal.cshtml" />
     <Content Include="Views\Shared\_GameFormModal.cshtml" />
     <Content Include="Views\Shared\_MovieFormModal.cshtml" />
-    <Content Include="Views\Shared\_SeriesFormModal.cshtml" />
     <Content Include="Views\UserProfile\_SendTicket.cshtml" />
     <Content Include="Views\Admin\_BanUserModal.cshtml" />
-    <Content Include="Views\Books\_RecommendBook.cshtml" />
-    <Content Include="Views\Series\_RecommendSeries.cshtml" />
-    <Content Include="Views\Movies\_RecommendMovie.cshtml" />
-    <Content Include="Views\Games\_RecommendGame.cshtml" />
+    <Content Include="Views\Book\_RecommendBook.cshtml" />
+    <Content Include="Views\Movie\_RecommendMovie.cshtml" />
+    <Content Include="Views\Game\_RecommendGame.cshtml" />
+    <Content Include="Views\Shared\_Recommend.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\fonts\" />
+    <Folder Include="Views\Base\" />
     <Folder Include="Views\Image\" />
   </ItemGroup>
   <ItemGroup>
@@ -777,152 +559,11 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201708210940118_AddingModelsToDb.resx">
-      <DependentUpon>201708210940118_AddingModelsToDb.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201805011608182_modelRework.resx">
+      <DependentUpon>201805011608182_modelRework.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708210953254_PopulationgGenresList.resx">
-      <DependentUpon>201708210953254_PopulationgGenresList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708211319183_PopulatingBooksTableToTests.resx">
-      <DependentUpon>201708211319183_PopulatingBooksTableToTests.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708211404164_ChangesInBookModel.resx">
-      <DependentUpon>201708211404164_ChangesInBookModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708212123135_PopulatingGamesTableToTests.resx">
-      <DependentUpon>201708212123135_PopulatingGamesTableToTests.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708221504469_changingBookModel.resx">
-      <DependentUpon>201708221504469_changingBookModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708221616176_changingOthersModel.resx">
-      <DependentUpon>201708221616176_changingOthersModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708221708250_changingOthersModel2.resx">
-      <DependentUpon>201708221708250_changingOthersModel2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708232224580_DeletingUserModel.resx">
-      <DependentUpon>201708232224580_DeletingUserModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708240956484_NewUsersDataManagementSystem.resx">
-      <DependentUpon>201708240956484_NewUsersDataManagementSystem.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708241035279_TryingToUseUserIdAsaString.resx">
-      <DependentUpon>201708241035279_TryingToUseUserIdAsaString.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708241502404_TryingToUseUserIdAsaString2.resx">
-      <DependentUpon>201708241502404_TryingToUseUserIdAsaString2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708251103241_AddUserIdToCreatedItems.resx">
-      <DependentUpon>201708251103241_AddUserIdToCreatedItems.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708261533167_testImage.resx">
-      <DependentUpon>201708261533167_testImage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708261606173_testImage2.resx">
-      <DependentUpon>201708261606173_testImage2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708261709327_testImage3.resx">
-      <DependentUpon>201708261709327_testImage3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708261728031_testImage4.resx">
-      <DependentUpon>201708261728031_testImage4.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708261822532_testImage5.resx">
-      <DependentUpon>201708261822532_testImage5.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708271818209_date.resx">
-      <DependentUpon>201708271818209_date.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708281517305_SeriesGenreEdit.resx">
-      <DependentUpon>201708281517305_SeriesGenreEdit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708281520086_SeriesGenre2.resx">
-      <DependentUpon>201708281520086_SeriesGenre2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708281532407_SeriesGenrePopulating.resx">
-      <DependentUpon>201708281532407_SeriesGenrePopulating.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708291628533_cleaning.resx">
-      <DependentUpon>201708291628533_cleaning.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708291645460_recommendationModel.resx">
-      <DependentUpon>201708291645460_recommendationModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708291659452_UpdatingUserItemsLists.resx">
-      <DependentUpon>201708291659452_UpdatingUserItemsLists.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709011901225_AddingTicketFeautureToDatabase.resx">
-      <DependentUpon>201709011901225_AddingTicketFeautureToDatabase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709011915055_AddingBanUserAddItemPrivilageToDatabase.resx">
-      <DependentUpon>201709011915055_AddingBanUserAddItemPrivilageToDatabase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709021123569_changingTicketVariables.resx">
-      <DependentUpon>201709021123569_changingTicketVariables.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709041715440_addAdminAccount.resx">
-      <DependentUpon>201709041715440_addAdminAccount.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709111902341_wtf.resx">
-      <DependentUpon>201709111902341_wtf.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709211721375_scoresForBooks.resx">
-      <DependentUpon>201709211721375_scoresForBooks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709211932072_scoresForBooks2.resx">
-      <DependentUpon>201709211932072_scoresForBooks2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709211935523_scoresForBooks3.resx">
-      <DependentUpon>201709211935523_scoresForBooks3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709231644004_scoresToEveryone!.resx">
-      <DependentUpon>201709231644004_scoresToEveryone!.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709231646094_scoresInItemModels.resx">
-      <DependentUpon>201709231646094_scoresInItemModels.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709281558216_TryToAddComments.resx">
-      <DependentUpon>201709281558216_TryToAddComments.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709281829365_AddDataToComments.resx">
-      <DependentUpon>201709281829365_AddDataToComments.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709291827543_comments.resx">
-      <DependentUpon>201709291827543_comments.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709291913112_RemoveCommentsForNow.resx">
-      <DependentUpon>201709291913112_RemoveCommentsForNow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709300039315_CommentsForGames.resx">
-      <DependentUpon>201709300039315_CommentsForGames.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709301500496_CommentsForEveryone.resx">
-      <DependentUpon>201709301500496_CommentsForEveryone.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709301721006_test.resx">
-      <DependentUpon>201709301721006_test.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709301902285_test2.resx">
-      <DependentUpon>201709301902285_test2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709301910299_test3.resx">
-      <DependentUpon>201709301910299_test3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709301938546_ReworkBookComments.resx">
-      <DependentUpon>201709301938546_ReworkBookComments.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709302043342_ReworkCommentForRest.resx">
-      <DependentUpon>201709302043342_ReworkCommentForRest.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709302116466_ReworkScoresForBooks.resx">
-      <DependentUpon>201709302116466_ReworkScoresForBooks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709302246148_ReworkScoresForRest.resx">
-      <DependentUpon>201709302246148_ReworkScoresForRest.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710031814465_Fix.resx">
-      <DependentUpon>201710031814465_Fix.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201805081834488_check.resx">
+      <DependentUpon>201805081834488_check.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
@@ -939,7 +580,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>49639</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
