@@ -11,9 +11,8 @@
         @Html.TextBoxFor(m => m.Message, new { @class = "form-control" })
     </div>
     @Html.HiddenFor(m => m.EntityId);
-@*
-    @Html.HiddenFor(m => m.EntityId, (int) ViewBag.EntityId);
-    @Html.HiddenFor(x => x.ElementType, (MyHobbyList.Models.ElementType)ViewBag.ElementType)
-*@
+    
+    @Html.HiddenFor(x => x.ElementType)
+
     <button type="submit" class="button-for-modal">Send</button>
 }

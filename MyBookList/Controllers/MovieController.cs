@@ -22,7 +22,7 @@ namespace MyHobbyList.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            var entities = GetEntities<Movie>(null);
+            var entities = GetEntities<Movie>(false);
 
             entities = entities.OrderByDescending(x => x.AverageScore).ToList();
 
@@ -49,6 +49,9 @@ namespace MyHobbyList.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var user = GetUserData();
+                ViewBag.IsBanned = user.AccountState;
+                ViewBag.IsOwner = _context.Movies.Any(x => x.CreateById.Equals(user.UserId) && x.Id == id);
+                ViewBag.AlreadyAdded = user.Entities.Any(x => x.ElementType == ElementType.Movie && x.Id == id);
 
                 var score = user.Scores.FirstOrDefault(x => x.Id == element.Id && x.Entity.ElementType == ElementType.Movie);
 
@@ -100,6 +103,11 @@ namespace MyHobbyList.Controllers
 
         public ActionResult Delete(int id)
         {
+            var userData = GetUserData();
+
+            if (userData.AccountState == AccountState.Blocked)
+                return View("Error");
+
             bool result;
 
             if (User.IsInRole("Admin"))
@@ -135,12 +143,20 @@ namespace MyHobbyList.Controllers
 
         public ActionResult Edit(int id)
         {
+            var userData = GetUserData();
+
+            if (userData.AccountState == AccountState.Blocked)
+                return View("Error");
+
             Movie entity;
 
             if (User.IsInRole("Admin"))
                 entity = GetEntity<Movie>(id, null);
             else
                 entity = GetEntity<Movie>(id, GetUserData().UserId);
+
+            if (entity == null)
+                return null;
 
             var viewModel = Mapper.Map<Movie, MovieFormViewModel>(entity);
 
@@ -152,6 +168,11 @@ namespace MyHobbyList.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Update(MovieFormViewModel form, HttpPostedFileBase UploadImage)
         {
+            var userData = GetUserData();
+
+            if (userData.AccountState == AccountState.Blocked)
+                return View("Error");
+
             if (!System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
                 return new HttpNotFoundResult();
 
@@ -171,8 +192,6 @@ namespace MyHobbyList.Controllers
 
             if (form.Id == 0)
             {
-                var userData = GetUserData();
-
                 var entity = Mapper.Map<MovieFormViewModel, Movie>(form);
 
                 entity.CreateById = userData.UserId;

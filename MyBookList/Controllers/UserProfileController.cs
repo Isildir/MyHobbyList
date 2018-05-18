@@ -49,11 +49,11 @@ namespace MyHobbyList.Controllers
 
         public ActionResult Index()
         {
-            var userData = base.GetUserData();
+            var userData = GetUserData();
 
-            var booksList = base.GetEntities<Book>(userData.UserId);
-            var moviesList = base.GetEntities<Movie>(userData.UserId);
-            var gamesList = base.GetEntities<Game>(userData.UserId);
+            var booksList = GetEntities<Book>(true);
+            var moviesList = GetEntities<Movie>(true);
+            var gamesList = GetEntities<Game>(true);
 
             var view = new UserProfileViewModel()
             {
@@ -61,6 +61,23 @@ namespace MyHobbyList.Controllers
                 MoviesList = MapEntitiesToIndexViewModels<Movie, MovieIndexViewModel>(moviesList),
                 GamesList = MapEntitiesToIndexViewModels<Game, GameIndexViewModel>(gamesList)
             };
+
+            var recommendationsViewModel = new List<SimiliarEntityMiniRecommend>();
+
+            foreach (var item in userData.Reccomendations)
+                recommendationsViewModel.Add(new SimiliarEntityMiniRecommend()
+                {
+                    Id = item.EntityId.Value,
+                    Title = item.Entity.Title,
+                    ElementType = item.ElementType,
+                    ImageId = item.Entity.ImageId,
+                    RecommenderEmail = item.FromUserEmail,
+                    Message = item.Message
+                });
+
+            view.RecommendedEntities = recommendationsViewModel;
+
+            ViewBag.IsBanned = userData.AccountState;
 
             return View(view);
         }
@@ -125,24 +142,19 @@ namespace MyHobbyList.Controllers
 
             return RedirectToAction(string.Format("Details/{0}", id), System.Enum.GetName(typeof(ElementType), elementType).ToString());
         }
-
-        /*
-        public ActionResult SendTicket(UserTicketViewModel form)
+        
+        public ActionResult SendTicket(Ticket form)
         {
             if (!ModelState.IsValid)
             {
-                return View("SendTicket", form);
+                return PartialView("_SendTicket", form);
             }
 
-            var ticket = new Ticket()
-            {
-                UserId = base.GetUserData().UserId,
-                TicketBody = form.TicketBody,
-                TicketTitle = form.TicketTitle,
-                TimeSend = DateTime.Now.Date
-            };
+            var user = GetUserData();
+            //form.UserId = user.UserId;
+            form.UserName = user.Email;
 
-            _context.AdminTickets.Add(ticket);
+            _context.Tickets.Add(form);
 
             _context.SaveChanges();
 
@@ -150,14 +162,13 @@ namespace MyHobbyList.Controllers
 
             return RedirectToAction("Index");
         }
-        */
-
+        
         public ActionResult AddEntityToUserBase(int id, ElementType elementType)
         {
             var user = GetUserData();
             var entity = GetEntity(id, elementType, null);
 
-            if (user.Entities.Any(x => x.Id == id && x.ElementType == elementType))
+            if (!user.Entities.Any(x => x.Id == id && x.ElementType == elementType))
             {
                 user.Entities.Add(entity);
 
@@ -190,7 +201,7 @@ namespace MyHobbyList.Controllers
             return RedirectToAction(string.Format("Details/{0}", id), System.Enum.GetName(typeof(ElementType), elementType).ToString());
         }
         
-        public ActionResult Recommend(string userName, Recommend model)
+        public ActionResult Recommend(string userName, string title, Recommend model)
         {
             var targetUser = GetUserDataByEmail(userName);
 
@@ -210,6 +221,49 @@ namespace MyHobbyList.Controllers
             _context.SaveChanges();
 
             TempData.Add("success", System.Enum.GetName(typeof(ElementType), model.ElementType) + " sucessfully recommended");
+
+            return RedirectToAction("Details", System.Enum.GetName(typeof(ElementType), model.ElementType), new { id = model.EntityId });
+        }
+
+        public ActionResult LikeRecommendation(int id)
+        {
+            var user = GetUserData();
+
+            var item = user.Reccomendations.Find(x => x.EntityId == id);
+
+            if (item != null)
+            {
+                if(!user.Entities.Any(x => x.Id == item.EntityId && x.ElementType == item.ElementType))
+                    user.Entities.Add(item.Entity);
+
+                _context.Entry(item).State = EntityState.Deleted;
+
+                _context.SaveChanges();
+
+                TempData.Add("success", "Item sucessfully added to your list");
+            }
+            else
+                TempData.Add("fail", "something went wrong");
+
+            return RedirectToAction("Index", "UserProfile");
+        }
+        
+        public ActionResult RemoveRecommendation(int id)
+        {
+            var user = GetUserData();
+
+            var item = user.Reccomendations.Find(x => x.EntityId == id);
+
+            if (item != null)
+            {
+                _context.Entry(item).State = EntityState.Deleted;
+
+                _context.SaveChanges();
+
+                TempData.Add("success", "recommendation sucessfully removed");
+            }
+            else
+                TempData.Add("fail", "something went wrong");
 
             return RedirectToAction("Index", "UserProfile");
         }

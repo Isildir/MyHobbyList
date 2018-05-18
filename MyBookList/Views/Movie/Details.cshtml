@@ -4,11 +4,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var user = Request.IsAuthenticated;
+    var isUserActive = user && (MyHobbyList.Models.AccountState)ViewBag.IsBanned == MyHobbyList.Models.AccountState.Active ? true : false;
+    var isOwner = (bool)ViewBag.IsOwner;
+    var alreadyAdded = (bool)ViewBag.AlreadyAdded;
 
     var admin = this.User.IsInRole("Admin");
 }
 <link rel="stylesheet" type="text/css" href="~/Content/styles/DetailsPage.css" />
 <link rel="stylesheet" type="text/css" href="~/Content/styles/Modals.css" />
+
 <table id="table-main">
     <tbody>
         <tr>
@@ -54,10 +58,19 @@
     <tr>
         @if (user)
         {
-            <th>@Html.ActionLink("Add to my Base", "AddEntityToUserBase", "UserProfile", new { id = Model.Id, elementType = MyHobbyList.Models.ElementType.Movie }, new { @class = "btn btn-primary" })</th>
-            <th id="button-unactive" class="btn btn-primary">Already Added</th>
-            <th><button id="btnShowModal" type="button" class="btn btn-primary">Edit Movie</button></th>
-            <th>@Html.ActionLink("Delete this Movie", "Delete", null, new { id = Model.Id }, new { @class = "btn btn-primary" })</th>
+            if (alreadyAdded)
+            {
+                <th id="button-unactive" class="btn btn-primary">Already Added</th>
+            }
+            else
+            {
+                <th>@Html.ActionLink("Add to my Base", "AddEntityToUserBase", "UserProfile", new { id = Model.Id, elementType = MyHobbyList.Models.ElementType.Movie }, new { @class = "btn btn-primary" })</th>
+            }
+            if (isUserActive && isOwner)
+            {
+                <th><button id="btnShowModal" type="button" class="btn btn-primary">Edit Movie</button></th>
+                <th>@Html.ActionLink("Delete this Movie", "Delete", null, new { id = Model.Id }, new { @class = "btn btn-primary" })</th>
+            }
             <th><button id="RecMovie" type="button" class="btn btn-primary">Recommend</button></th>
         }
     </tr>
@@ -103,7 +116,8 @@
         }
     </div>
 }
-@if (user)
+
+@if (isUserActive)
 {
     <div class="modal fade" id="AccountEditModal" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
         <div class="modal-dialog modalAccountEdit" role="document">
@@ -118,8 +132,10 @@
             </div>
         </div>
     </div>
+}
 
-
+@if (user)
+{
     <div class="modal fade" id="SendRecommend" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
         <div class="modal-dialog modalAccountEdit" role="document">
             <div class="modal-content">
@@ -128,7 +144,7 @@
                     <h3><strong>Enter your friend nick<span class="accountname"></span></strong></h3>
                 </div>
                 <div class="modal-body" id="form-container">
-                    @Html.Partial("_RecommendMovie")
+                    @Html.Partial("_Recommend", new MyHobbyList.Models.Recommend(Model.Id, MyHobbyList.Models.ElementType.Movie))
                 </div>
             </div>
         </div>

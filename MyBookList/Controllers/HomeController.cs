@@ -26,11 +26,6 @@ namespace MyHobbyList.Controllers
 
             return View();
         }
-        public ActionResult sss()
-        {
-
-            return View();
-        }
 
         public ActionResult ModalPopUp()
         {

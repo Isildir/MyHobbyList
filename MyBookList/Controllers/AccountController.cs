@@ -157,15 +157,13 @@ namespace MyHobbyList.Controllers
                 if (result.Succeeded)
                 {
                     // Temp code 
-                    
-
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                     var userId = SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
-
+                    UserManager.AddToRole(userId, "Regular");
                     ApplicationDbContext _context = new ApplicationDbContext();
 
-                    _context.UserDatas.Add(new UserData(userId, model.Email));
+                    _context.UserDatas.Add(new UserData(userId, model.Email) { AccountState = AccountState.Active, AccountType = AccountType.Normal });
 
                     await _context.SaveChangesAsync();
 

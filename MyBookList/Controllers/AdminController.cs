@@ -17,101 +17,66 @@ namespace MyHobbyList.Controllers
         {
             _context = new ApplicationDbContext();
         }
-        /*
+
         public ActionResult Index()
         {
-            var ticketsList = _context.AdminTickets.ToList();
+            return View();
+        }
 
-            var view = new List<AdminPanelIndexView>();
+        public ActionResult GetUsers()
+        {
+            var users = _context.UserDatas.ToList();
 
-            foreach(var ticket in ticketsList)
-            {
-                view.Add(new AdminPanelIndexView()
-                {
-                    Id = ticket.Id,
-                    TicketTitle = ticket.TicketTitle,
-                    SendingUserName = ticket.SendingUserName,
-                    TimeSend = ticket.TimeSend,
-                });
-            }
+            return View("UserIndex", users);
+        }
 
-            return View(view);
+        public ActionResult GetBannedUsers()
+        {
+            var users = _context.UserDatas.Where(x => x.AccountState == AccountState.Blocked).ToList();
+
+            return View("UserIndex", users);
+        }
+
+        public ActionResult PendingTickets()
+        {
+            var tickets = _context.Tickets.ToList();
+
+            foreach (var ticket in tickets)
+                ticket.UserId = string.Empty;
+
+            return View("Tickets", tickets);
         }
         
-        public ActionResult TicketDetails(int id)
+        public ActionResult BanUser(int userId)
         {
-            var ticket = _context.AdminTickets.Single(x => x.Id == id);
-
-            var view = new AdminPanelIndexView()
-            {
-                Id = ticket.Id,
-                SendingUserName = ticket.SendingUserName,
-                TimeSend = ticket.TimeSend,
-                TicketBody = ticket.TicketBody,
-                TicketTitle = ticket.TicketTitle
-            };
-
-            return View(view);
-        }
-        
-        public ActionResult UnbanUserAddPrivilage(int id)
-        {
-            var user = _context.BannedUsers.Single(x => x.Id == id);
-
-            _context.BannedUsers.Remove(user);
+            _context.UserDatas.Find(userId).AccountState = AccountState.Blocked;
 
             _context.SaveChanges();
+            TempData.Add("success", "User has been blocked");
 
-            TempData.Add("success", "User successfully unbanned");
-            return RedirectToAction("BannedUsersList");
+            return RedirectToAction("GetUsers");
         }
-        
-        public ActionResult BanUserAddPrivilage(string userName)
+
+        public ActionResult UnbanUser(int userId)
         {
-            if (userName.Length == 0)
-            {
-                return RedirectToAction("Index");
-            }
-
-            if(_context.Users.Single(m => m.UserName == userName) != null)
-            {
-                _context.BannedUsers.Add(new BannedUser() { UserId = userName });
-                
-                _context.SaveChanges();
-            }
-
-            TempData.Add("success", "User " + userName + " successfully Banned");
-            return RedirectToAction("BannedUsersList");
-        }
-        
-        public ActionResult BannedUsersList()
-        {
-            var bannedUsers = _context.BannedUsers.ToList();
-
-            var view = new List<AdminPanelBannedView>();
-
-            foreach(var user in bannedUsers)
-            {
-                view.Add(new AdminPanelBannedView()
-                {
-                    Id = user.Id,
-                    UserId = user.UserId
-                });
-            }
-
-            return View(view);
-        }
-        
-        public ActionResult DeleteTicket(int id)
-        {
-            var ticketToDelete = _context.AdminTickets.Single(x => x.Id == id);
-
-            _context.AdminTickets.Remove(ticketToDelete);
+            _context.UserDatas.Find(userId).AccountState = AccountState.Active;
 
             _context.SaveChanges();
+            TempData.Add("success", "User has been unblocked");
 
-            TempData.Add("success", "Ticket deleted");
-            return RedirectToAction("Index");
-        }*/
+            return RedirectToAction("GetBannedUsers");
+        }
+
+        public ActionResult RemoveTicket(int ticketId)
+        {
+            var ticket = _context.Tickets.Find(ticketId);
+
+            _context.Entry(ticket).State = System.Data.Entity.EntityState.Deleted;
+
+            _context.SaveChanges();
+            TempData.Add("success", "Ticket has been deleted");
+
+            return RedirectToAction("PendingTickets");
+        }
     }
 }

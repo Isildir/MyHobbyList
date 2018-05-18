@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var user = Request.IsAuthenticated;
+    var isUserActive = user && (MyHobbyList.Models.AccountState)ViewBag.IsBanned == MyHobbyList.Models.AccountState.Active ? true : false;
+    var isOwner = (bool)ViewBag.IsOwner;
+    var alreadyAdded = (bool)ViewBag.AlreadyAdded;
 
     var admin = this.User.IsInRole("Admin");
 }
@@ -55,10 +58,19 @@
     <tr>
         @if (user)
         {
-            <th>@Html.ActionLink("Add to my Base", "AddEntityToUserBase", "UserProfile", new { id = Model.Id, elementType = MyHobbyList.Models.ElementType.Game }, new { @class = "btn btn-primary" })</th>
-            <th id="button-unactive" class="btn btn-primary">Already Added</th>
-            <th><button id="btnShowModal" type="button" class="btn btn-primary">Edit Game</button></th>
-            <th>@Html.ActionLink("Delete this Game", "Delete", null, new { id = Model.Id }, new { @class = "btn btn-primary" })</th>
+            if (alreadyAdded)
+            {
+                <th id="button-unactive" class="btn btn-primary">Already Added</th>
+            }
+            else
+            {
+                <th>@Html.ActionLink("Add to my Base", "AddEntityToUserBase", "UserProfile", new { id = Model.Id, elementType = MyHobbyList.Models.ElementType.Game }, new { @class = "btn btn-primary" })</th>
+            }
+            if (isUserActive && isOwner)
+            {
+                <th><button id="btnShowModal" type="button" class="btn btn-primary">Edit Game</button></th>
+                <th>@Html.ActionLink("Delete this Game", "Delete", null, new { id = Model.Id }, new { @class = "btn btn-primary" })</th>
+            }
             <th><button id="RecGame" type="button" class="btn btn-primary">Recommend</button></th>
         }
     </tr>
@@ -87,8 +99,8 @@
         @Html.TextArea("CommentData", null, new { @class = "comment-area" })
     </div>
 
-    @Html.Hidden("id", Model.Id );
-    @Html.Hidden("elementType", MyHobbyList.Models.ElementType.Game );
+    @Html.Hidden("id", Model.Id);
+    @Html.Hidden("elementType", MyHobbyList.Models.ElementType.Game);
 
     <button id="comment-submit" type="submit">Send</button>
 }
@@ -106,7 +118,9 @@
         }
     </div>
 }
-@if (user)
+
+
+@if (isUserActive)
 {
     <div class="modal fade" id="AccountEditModal" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
         <div class="modal-dialog modalAccountEdit" role="document">
@@ -121,7 +135,10 @@
             </div>
         </div>
     </div>
+}
 
+@if (user)
+{
     <div class="modal fade" id="SendRecommend" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
         <div class="modal-dialog modalAccountEdit" role="document">
             <div class="modal-content">
@@ -130,7 +147,7 @@
                     <h3><strong>Enter your friend nick<span class="accountname"></span></strong></h3>
                 </div>
                 <div class="modal-body" id="form-container">
-                    @Html.Partial("_RecommendGame")
+                    @Html.Partial("_RecommendGame", new MyHobbyList.Models.Recommend(Model.Id, MyHobbyList.Models.ElementType.Game))
                 </div>
             </div>
         </div>

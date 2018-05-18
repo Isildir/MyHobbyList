@@ -22,7 +22,7 @@ namespace MyHobbyList.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            var entities = GetEntities<Book>(null);
+            var entities = GetEntities<Book>(false);
 
             entities = entities.OrderByDescending(x => x.AverageScore).ToList();
             
@@ -49,6 +49,9 @@ namespace MyHobbyList.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var user = GetUserData();
+                ViewBag.IsBanned = user.AccountState;
+                ViewBag.IsOwner = _context.Books.Any(x => x.CreateById.Equals(user.UserId) && x.Id == id);
+                ViewBag.AlreadyAdded = user.Entities.Any(x => x.ElementType == ElementType.Book && x.Id == id);
 
                 var score = user.Scores.FirstOrDefault(x => x.EntityId == element.Id && x.ElementType == ElementType.Book);
 
@@ -96,6 +99,11 @@ namespace MyHobbyList.Controllers
         
         public ActionResult Delete(int id)
         {
+            var userData = GetUserData();
+
+            if (userData.AccountState == AccountState.Blocked)
+                return View("Error");
+
             bool result;
 
             if(User.IsInRole("Admin"))
@@ -126,17 +134,25 @@ namespace MyHobbyList.Controllers
                 return PartialView("_BookFormModal", viewModel);
             }
             else
-                return RedirectToAction("Index", "UserProfile");
+                return View("Error");
         }
         
         public ActionResult Edit(int id)
         {
+            var userData = GetUserData();
+
+            if(userData.AccountState == AccountState.Blocked)
+                return View("Error");
+
             Book entity;
 
             if(User.IsInRole("Admin"))
                 entity = GetEntity<Book>(id, null);
             else
                 entity = GetEntity<Book>(id, GetUserData().UserId);
+
+            if (entity == null)
+                return null;
 
             var viewModel = Mapper.Map<Book, BookFormViewModel>(entity);
 
@@ -148,6 +164,11 @@ namespace MyHobbyList.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Update(BookFormViewModel form, HttpPostedFileBase UploadImage)
         {
+            var userData = GetUserData();
+
+            if (userData.AccountState == AccountState.Blocked)
+                return View("Error");
+
             if (!System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
                 return new HttpNotFoundResult();
 
@@ -167,8 +188,6 @@ namespace MyHobbyList.Controllers
             
             if (form.Id == 0)
             {
-                var userData = GetUserData();
-
                 var entity = Mapper.Map<BookFormViewModel, Book>(form);
 
                 entity.CreateById = userData.UserId;

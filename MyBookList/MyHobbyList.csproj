@@ -217,6 +217,26 @@
     <Compile Include="Migrations\201805081834488_check.Designer.cs">
       <DependentUpon>201805081834488_check.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805131227091_fixToTickets.cs" />
+    <Compile Include="Migrations\201805131227091_fixToTickets.Designer.cs">
+      <DependentUpon>201805131227091_fixToTickets.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805171729543_anotherFixToTickets.cs" />
+    <Compile Include="Migrations\201805171729543_anotherFixToTickets.Designer.cs">
+      <DependentUpon>201805171729543_anotherFixToTickets.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805172018494_ChangesToRecommendationClass.cs" />
+    <Compile Include="Migrations\201805172018494_ChangesToRecommendationClass.Designer.cs">
+      <DependentUpon>201805172018494_ChangesToRecommendationClass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805172020234_RevertingChangesToRecommendationClass.cs" />
+    <Compile Include="Migrations\201805172020234_RevertingChangesToRecommendationClass.Designer.cs">
+      <DependentUpon>201805172020234_RevertingChangesToRecommendationClass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805172201320_FixToRecommend.cs" />
+    <Compile Include="Migrations\201805172201320_FixToRecommend.Designer.cs">
+      <DependentUpon>201805172201320_FixToRecommend.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account\AccountViewModels.cs" />
     <Compile Include="Models\Comment.cs" />
@@ -242,7 +262,6 @@
     <Compile Include="ViewModels\EntityModelsParentClasses.cs" />
     <Compile Include="ViewModels\SimiliarEntityMini.cs" />
     <Compile Include="ViewModels\User\UserProfileViewModel.cs" />
-    <Compile Include="ViewModels\User\UserTicketViewModel.cs" />
     <Compile Include="ViewModels\ViewModelSharedProperties.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -528,23 +547,17 @@
     <Content Include="Views\Movie\Details.cshtml" />
     <Content Include="Views\UserProfile\Index.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\Admin\TicketDetails.cshtml" />
-    <Content Include="Views\Admin\BannedUsersList.cshtml" />
     <Content Include="Views\Shared\_BookFormModal.cshtml" />
     <Content Include="Views\Shared\_GameFormModal.cshtml" />
     <Content Include="Views\Shared\_MovieFormModal.cshtml" />
     <Content Include="Views\UserProfile\_SendTicket.cshtml" />
-    <Content Include="Views\Admin\_BanUserModal.cshtml" />
-    <Content Include="Views\Book\_RecommendBook.cshtml" />
-    <Content Include="Views\Movie\_RecommendMovie.cshtml" />
-    <Content Include="Views\Game\_RecommendGame.cshtml" />
     <Content Include="Views\Shared\_Recommend.cshtml" />
+    <Content Include="Views\Admin\UserIndex.cshtml" />
+    <Content Include="Views\Admin\Tickets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\fonts\" />
-    <Folder Include="Views\Base\" />
-    <Folder Include="Views\Image\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -564,6 +577,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805081834488_check.resx">
       <DependentUpon>201805081834488_check.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805131227091_fixToTickets.resx">
+      <DependentUpon>201805131227091_fixToTickets.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805171729543_anotherFixToTickets.resx">
+      <DependentUpon>201805171729543_anotherFixToTickets.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805172018494_ChangesToRecommendationClass.resx">
+      <DependentUpon>201805172018494_ChangesToRecommendationClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805172020234_RevertingChangesToRecommendationClass.resx">
+      <DependentUpon>201805172020234_RevertingChangesToRecommendationClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805172201320_FixToRecommend.resx">
+      <DependentUpon>201805172201320_FixToRecommend.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

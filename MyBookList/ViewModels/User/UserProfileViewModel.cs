@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using MyHobbyList.Models;
+﻿using System.Collections.Generic;
 
 namespace MyHobbyList.ViewModels
 {
@@ -13,5 +9,7 @@ namespace MyHobbyList.ViewModels
         public IEnumerable<MovieIndexViewModel> MoviesList { get; set; }
 
         public IEnumerable<GameIndexViewModel> GamesList { get; set; }
+
+        public IEnumerable<SimiliarEntityMiniRecommend> RecommendedEntities { get; set; }
     }
 }

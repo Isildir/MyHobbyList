@@ -18,10 +18,15 @@ namespace MyHobbyList.Controllers
             return _context.UserDatas.FirstOrDefault(m => m.UserId.Equals(userID));
         }
         
-        protected IList<T> GetEntities<T>(string userId) where T : Entity
+        protected IList<T> GetEntities<T>(bool userOnly) where T : Entity
         {
-            return !string.IsNullOrEmpty(userId) ? _context.Set<T>().Include(a => a.Genre).AsNoTracking().Where(x => x.CreateById == userId).ToList<T>() :
-                _context.Set<T>().AsNoTracking().ToList<T>();
+            if(!userOnly)
+                return _context.Set<T>().Include(a => a.Genre).AsNoTracking().ToList<T>();
+            
+            var userData = GetUserData().Entities.Where(x => x.ElementType.ToString().Equals(typeof(T).Name)).Select(x => x.Id).ToList();
+
+            return _context.Set<T>().Include(a => a.Genre).AsNoTracking().Where(x => userData.Contains(x.Id)).ToList<T>();
+                
         }
     }
 }
