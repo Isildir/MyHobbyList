@@ -1,0 +1,48 @@
+﻿#actions {
+    width: 70%;
+    margin-left: 15%;
+    margin-right: auto;
+    justify-content: center;
+    display: flex;
+    margin-top: 20px;
+}
+
+#actions *{
+    margin-left:2%;
+    margin-right:2%;
+}
+
+#items{
+    width:100%;
+}
+
+    #items h2 {
+        text-align: center;
+    }
+
+.table-image{
+    width:80px;
+}
+
+.table-text {
+    text-align: center;
+    font-size: 18px;
+}
+
+.table-item {
+    text-align: center;
+    font-size: 14px;
+}
+
+.table-actions {
+    text-align: center;
+    padding: 0;
+}
+
+#recommends-modal {
+    width: fit-content;
+}
+
+#recommends-modal h5{
+    text-align: center
+}

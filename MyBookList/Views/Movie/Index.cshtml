@@ -21,14 +21,14 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td style="width:80px;text-align:center"><img id="image" src='@Url.Action("ShowMini", "Image", new { id = item.ImageId})' height="100" width="70" /></td>
-            <th>@Html.ActionLink(item.Title, "Details", "Movie", new { id = item.Id }, null)</th>
-            <td>@item.AverageScore</td>
-            <th>@item.Director</th>
-            <th>@item.ReleaseDate.ToString("MM/dd/yyyy")</th>
-            <th>@item.GenreName</th>
-        </tr>
+    <tr>
+        <td style="width:80px;text-align:center"><img id="image" src='@Url.Action("ShowMini", "Image", new { id = item.ImageId})' height="100" width="70" /></td>
+        <th>@Html.ActionLink(item.Title, "Details", "Movie", new { id = item.Id }, null)</th>
+        <td>@Math.Round(item.AverageScore, 1)</td>
+        <th>@item.Director</th>
+        <th>@item.ReleaseDate.ToString("MM/dd/yyyy")</th>
+        <th>@item.GenreName</th>
+    </tr>
     }
 </table>
 

@@ -1,9 +1,5 @@
 ﻿using MyHobbyList.Models;
-using MyHobbyList.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MyHobbyList.Controllers

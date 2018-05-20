@@ -55,14 +55,14 @@ namespace MyHobbyList.Controllers
 
                 var score = user.Scores.FirstOrDefault(x => x.EntityId == element.Id && x.ElementType == ElementType.Book);
 
-                view.YourScore = score != null ? score.Value : 0.0;
+                view.YourScore = score != null ? score.Value : (short)0;
             }
 
             //making list of similiar books 1/same author 5/same genre
             var SimiliarList = new List<SimiliarEntityMini>();
             
             var entity = SameAuthorEntity(id, element.Author, ElementType.Book) as Book;
-            var entities = SameGenreEntities<Book>(id, element.Genre, entity == null ? 1 : 0);
+            var entities = SameGenreEntities<Book>(id, element.Genre, entity != null ? entity.Id : 0);
 
             if (entities != null)
             {
@@ -181,10 +181,8 @@ namespace MyHobbyList.Controllers
 
                 return RedirectToAction("Index", "UserProfile");
             }
-
-            var imageHandler = new ImageHandler();
-
-            int imageId = imageHandler.AddImage(UploadImage);
+            
+            int imageId = ImageHandler.AddImage(UploadImage, ref _context);
             
             if (form.Id == 0)
             {

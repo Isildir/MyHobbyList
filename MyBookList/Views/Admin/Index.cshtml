@@ -3,14 +3,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div>
-    <div>
-        @Html.ActionLink("Active Users", "GetUsers")
-    </div>
-    <div>
-        @Html.ActionLink("Blocked Users", "GetBannedUsers")
-    </div>
-    <div>
-        @Html.ActionLink("Pending Tickets", "PendingTickets")
-    </div>
+<link rel="stylesheet" type="text/css" href="~/Content/styles/AdminStyles.css" />
+
+<div id="actions">
+        @Html.ActionLink("Active Users", "GetUsers", null, new { @class="index-buttons" })
+        @Html.ActionLink("Blocked Users", "GetBannedUsers", null, new { @class = "index-buttons" })
+        @Html.ActionLink("Pending Tickets", "PendingTickets", null, new { @class = "index-buttons" })
 </div>

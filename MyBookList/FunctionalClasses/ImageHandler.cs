@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Web;
 using MyHobbyList.Models;
 
@@ -10,24 +7,18 @@ namespace MyHobbyList.FunctionalClasses
 {
     public class ImageHandler
     {
-        private ApplicationDbContext _context;
-
-        public ImageHandler()
-        {
-            _context = new ApplicationDbContext();
-        }
-
-        public int AddImage(HttpPostedFileBase UploadImage)
+        public static int AddImage(HttpPostedFileBase UploadImage, ref ApplicationDbContext _context)
         {
             int imageId;
 
             if (UploadImage != null)
             {
-                Models.File image = new Models.File();
-
-                image.Content = ReduceSize(UploadImage.InputStream, 210, 300);
-                image.AdditionalData = ReduceSize(UploadImage.InputStream, 70, 100);
-                image.ImageMimeType = UploadImage.ContentLength;
+                Models.File image = new Models.File
+                {
+                    Content = ReduceSize(UploadImage.InputStream, 210, 300, ref _context),
+                    AdditionalData = ReduceSize(UploadImage.InputStream, 70, 100, ref _context),
+                    ImageMimeType = UploadImage.ContentLength
+                };
 
                 _context.Files.Add(image);
                 _context.SaveChanges();
@@ -42,7 +33,7 @@ namespace MyHobbyList.FunctionalClasses
             return imageId;
         }
 
-        private static byte[] ReduceSize(Stream stream, int maxWidth, int maxHeight)
+        private static byte[] ReduceSize(Stream stream, int maxWidth, int maxHeight, ref ApplicationDbContext _context)
         {
             System.Drawing.Image source = System.Drawing.Image.FromStream(stream);
             double widthRatio = ((double)maxWidth) / source.Width;

@@ -1,0 +1,35 @@
+﻿.recommend-row {
+    display: flex;
+    justify-content: center;
+}
+
+.item-data {
+    display: flex;
+    margin: 10px;
+    height: 150px;
+    overflow: hidden;
+}
+
+.image {
+    height:150px;
+    width:105px;
+    float:left;
+    padding-right: 10px;
+}
+
+.item-data div {
+    width: 180px;
+}
+
+.item-data p{
+    max-width:180px;
+}
+
+.message {
+    font-size: 13px;
+    word-wrap: break-word;
+}
+
+.like-btn{
+    margin-left:10px;
+}

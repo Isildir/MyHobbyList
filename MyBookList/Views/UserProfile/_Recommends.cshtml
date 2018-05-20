@@ -1,0 +1,54 @@
+﻿@model List<MyHobbyList.ViewModels.SimiliarEntityMiniRecommend>
+
+<link rel="stylesheet" type="text/css" href="~/Content/styles/RecommendModal.css" />
+
+<div class="recommend-row">
+    @foreach (var item in Model.Take(4))
+    {
+        <div>
+            <div class="item-data">
+                <img class="image" src='@Url.Action("ShowFull", "Image", new { id = item.ImageId})'/>
+                <div>
+                    <p>
+                        @Html.ActionLink(@item.Title, "Details", System.Enum.GetName(typeof(MyHobbyList.Models.ElementType), item.ElementType).ToString(), new { id = item.Id }, null)
+                    </p>
+                    <p>Recommended by: @item.RecommenderEmail</p>
+                    <p class="message">@item.Message</p>
+                </div>
+            </div>
+            <div>
+                <p>
+                    @Html.ActionLink("Accept", "LikeRecommendation", new { id = item.Id }, new { @class = "btn btn-primary like-btn" })
+                @Html.ActionLink("Remove", "RemoveRecommendation", new { id = item.Id }, new { @class = "btn btn-primary" })
+            </p>
+        </div>
+    </div>
+}
+</div>
+
+@if (Model.Count() > 4)
+{
+    <div class="recommend-row">
+        @foreach (var item in Model.Skip(4))
+        {
+            <div>
+                <div class="item-data">
+                    <img class="image" src='@Url.Action("ShowFull", "Image", new { id = item.ImageId})'/>
+                    <div>
+                        <p>
+                            @Html.ActionLink(@item.Title, "Details", System.Enum.GetName(typeof(MyHobbyList.Models.ElementType), item.ElementType).ToString(), new { id = item.Id }, null)
+                        </p>
+                        <p>Recommended by: @item.RecommenderEmail</p>
+                        <p class="message">@item.Message</p>
+                    </div>
+                </div>
+                <div>
+                    <p>
+                        @Html.ActionLink("Accept", "LikeRecommendation", new { id = item.Id }, new { @class = "btn btn-primary like-btn" })
+                    @Html.ActionLink("Remove", "RemoveRecommendation", new { id = item.Id }, new { @class = "btn btn-primary" })
+                </p>
+            </div>
+        </div>
+    }
+    </div>
+}

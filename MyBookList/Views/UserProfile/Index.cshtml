@@ -6,103 +6,113 @@
     var isUserActive = (MyHobbyList.Models.AccountState)ViewBag.IsBanned == MyHobbyList.Models.AccountState.Active ? true : false;
 }
 <link rel="stylesheet" type="text/css" href="~/Content/styles/Modals.css" />
-<div style="display:flex">
-    <div style="display:grid">
-        @if (isUserActive)
-        {
-            <button id="ShowBookModal" type="button" class="btn btn-primary"> Add new Book </button>
-            <button id="ShowMovieModal" type="button" class="btn btn-primary"> Add new Movie </button>
-            <button id="ShowGameModal" type="button" class="btn btn-primary"> Add new Game </button>
-        }
-        <button id="SendTicket" type="button" class="btn btn-primary"> Send Ticket </button>
-    </div>
-    <div style="width:100%">
-        @if (Model.BooksList.Any())
-        {
-            <h2 style="width:100%;text-align:center;">My Books</h2>
-            <table style="width: 100%" class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th style="width:34%;text-align:center; font-size:18px;">Book Title</th>
-                        <th style="width:33%;text-align:center; font-size:18px;">Your Rating</th>
-                        <th style="text-align:center; font-size:18px;">Click To Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var book in Model.BooksList.ToList())
-                    {
-                        <tr>
-                            <th style="text-align:center; font-size:14px;">@Html.ActionLink(book.Title, "Details", "Book", new { id = book.Id }, null)</th>
-                            <th style="text-align:center; font-size:14px;">@book.AverageScore</th>
-                            <th style="text-align:center;padding: 0">@Html.ActionLink("Delete From My List", "Delete", "UserProfile", new { id = book.Id, elementType = MyHobbyList.Models.ElementType.Book }, new { @class = "btn btn-primary" })</th>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        @if (Model.MoviesList.Any())
-        {
-            <h2 style="width:100%;text-align:center;">My Movies</h2>
-            <table style="width: 100%" class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th style="width:34%;text-align:center; font-size:18px;">Movie Title</th>
-                        <th style="width:33%;text-align:center; font-size:18px;">Your Rating</th>
-                        <th style="text-align:center; font-size:18px;">Click To Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var movie in Model.MoviesList.ToList())
-                    {
-                        <tr>
-                            <th style="text-align:center; font-size:14px;">@Html.ActionLink(movie.Title, "Details", "Movie", new { id = movie.Id }, null)</th>
-                            <th style="text-align:center; font-size:14px;">@movie.AverageScore</th>
-                            <th style="text-align:center;padding: 0">@Html.ActionLink("Delete From My List", "Delete", "UserProfile", new { id = movie.Id, elementType = MyHobbyList.Models.ElementType.Movie }, new { @class = "btn btn-primary" })</th>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        @if (Model.GamesList.Any())
-        {
-            <h2 style="width:100%;text-align:center;">My Games</h2>
-            <table style="width: 100%" class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th style="width:34%;text-align:center; font-size:18px;">Game Title</th>
-                        <th style="width:33%;text-align:center; font-size:18px;">Your Rating</th>
-                        <th style="text-align:center; font-size:18px;">Click To Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var game in Model.GamesList.ToList())
-                    {
-                        <tr>
-                            <th style="text-align:center; font-size:14px;">@Html.ActionLink(game.Title, "Details", "Game", new { id = game.Id }, null)</th>
-                            <th style="text-align:center; font-size:14px;">@game.AverageScore</th>
-                            <th style="text-align:center;padding: 0">@Html.ActionLink("Delete From My List", "Delete", "UserProfile", new { id = game.Id, elementType = MyHobbyList.Models.ElementType.Movie }, new { @class = "btn btn-primary" })</th>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-    </div>
-    @if (Model.RecommendedEntities.Count() > 0)
+<link rel="stylesheet" type="text/css" href="~/Content/styles/UserStyles.css" />
+
+<div id="actions">
+    @if (isUserActive)
     {
-        <div>
-            @foreach(var item in Model.RecommendedEntities)
-            {
-                <p><img id="image" src='@Url.Action("ShowFull", "Image", new { id = item.ImageId})' height="150" width="105" /></p>
-            <p>@Html.ActionLink(@item.Title, "Details", System.Enum.GetName(typeof(MyHobbyList.Models.ElementType), item.ElementType).ToString(), new { id = item.Id }, null)</p>
-            <p>Recommended by: @item.RecommenderEmail</p>
-            <p>@item.Message</p>
-            <p>@Html.ActionLink("Add", "LikeRecommendation", new { id = item.Id }) @Html.ActionLink("Add", "RemoveRecommendation", new { id = item.Id })</p>
-            }
-        </div>
+        <button id="ShowBookModal" type="button" class="btn btn-primary"> Add new Book </button>
+        <button id="ShowMovieModal" type="button" class="btn btn-primary"> Add new Movie </button>
+        <button id="ShowGameModal" type="button" class="btn btn-primary"> Add new Game </button>
+    }
+    <button id="SendTicket" type="button" class="btn btn-primary"> Send Ticket </button>
+    @Html.ActionLink("Show recommendations", "ShowRecommendationsAgain", null, new { @class = "btn btn-primary" })
+</div>
+<div id="items">
+    @if (Model.BooksList.Any())
+    {
+        <h2>My Books</h2>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="table-image"></th>
+                    <th class="table-text">Book Title</th>
+                    <th class="table-text">Your Rating</th>
+                    <th class="table-text">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.BooksList.ToList())
+                {
+                    <tr>
+                        <td><img id="image" src='@Url.Action("ShowMini", "Image", new { id = item.ImageId})' height="100" width="70" /></td>
+                        <td class="table-item">@Html.ActionLink(item.Title, "Details", "Book", new { id = item.Id }, null)</td>
+                        <td class="table-item">@item.YourScore</td>
+                        <td class="table-actions">@Html.ActionLink("Delete From My List", "DeleteEntityFromUserBase", "UserProfile", new { id = item.Id, elementType = MyHobbyList.Models.ElementType.Book }, new { @class = "btn btn-primary" })</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    @if (Model.MoviesList.Any())
+    {
+        <h2>My Movies</h2>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="table-image"></th>
+                    <th class="table-text">Movie Title</th>
+                    <th class="table-text">Your Rating</th>
+                    <th class="table-text">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.MoviesList.ToList())
+                {
+                    <tr>
+                        <td><img id="image" src='@Url.Action("ShowMini", "Image", new { id = item.ImageId})' height="100" width="70" /></td>
+                        <td class="table-item">@Html.ActionLink(item.Title, "Details", "Movie", new { id = item.Id }, null)</td>
+                        <td class="table-item">@item.YourScore</td>
+                        <td class="table-actions">@Html.ActionLink("Delete From My List", "DeleteEntityFromUserBase", "UserProfile", new { id = item.Id, elementType = MyHobbyList.Models.ElementType.Movie }, new { @class = "btn btn-primary" })</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    @if (Model.GamesList.Any())
+    {
+        <h2>My Games</h2>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="table-image"></th>
+                    <th class="table-text">Game Title</th>
+                    <th class="table-text">Your Rating</th>
+                    <th class="table-text">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.GamesList.ToList())
+                {
+                    <tr>
+                        <td><img id="image" src='@Url.Action("ShowMini", "Image", new { id = item.ImageId})' height="100" width="70" /></td>
+                        <td class="table-item">@Html.ActionLink(item.Title, "Details", "Game", new { id = item.Id }, null)</td>
+                        <td class="table-item">@item.YourScore</td>
+                        <td class="table-actions">@Html.ActionLink("Delete From My List", "DeleteEntityFromUserBase", "UserProfile", new { id = item.Id, elementType = MyHobbyList.Models.ElementType.Movie }, new { @class = "btn btn-primary" })</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     }
 </div>
+@if (Model.RecommendedEntities.Count() > 0)
+{
+    <div class="modal fade" id="Recommends" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
+        <div class="modal-dialog" id="recommends-modal" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h5><strong>Recommended for you<span class="accountname"></span></strong></h5>
+                </div>
+                <div class="modal-body">
+                    @Html.Partial("_Recommends", Model.RecommendedEntities)
+                </div>
+            </div>
+        </div>
+    </div>
+}
 <div class="modal fade" id="Ticket" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
-    <div class="modal-dialog modalAccountEdit" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -120,7 +130,7 @@
 @if (isUserActive)
 {
     <div class="modal fade" id="BookEdit" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
-        <div class="modal-dialog modalAccountEdit" role="document">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -136,7 +146,7 @@
     </div>
 
     <div class="modal fade" id="MovieEdit" tabindex="-1" role="dialog" aria-labelledby="AccountEditModalLabel">
-        <div class="modal-dialog modalAccountEdit" role="document">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -170,6 +180,9 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+
+            $('#Recommends').focus()
+            $("#Recommends").modal('show');
 
             $('#BookEdit').on('shown.bs.modal', function () {
                 $('#myInput').focus()

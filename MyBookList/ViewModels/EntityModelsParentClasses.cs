@@ -13,9 +13,7 @@ namespace MyHobbyList.ViewModels
 
     public class EntityViewModelIndexDetailsProperties : ViewModelSharedProperties
     {
-        public double YourScore { get; set; } = 0;
-
-        public long NumberOfVoters { get; set; } = 0;
+        public short YourScore { get; set; } = 0;
 
         public double AverageScore { get; set; } = 0;
     }

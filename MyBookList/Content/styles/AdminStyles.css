@@ -1,0 +1,22 @@
+﻿#actions {
+    display: flex;
+    justify-content: space-around;
+}
+
+.index-buttons {
+    margin: 50px;
+    padding: 30px;
+    border: 1px solid black;
+    border-radius: 25px;
+    background-color: dimgray;
+    width: 200px;
+    text-align: center;
+    font-size: 18px;
+    transition-delay: 0s;
+}
+
+    .index-buttons:hover {
+        background-color: gray;
+        text-decoration: none;
+        transition: background-color 500ms ease-out;
+    }

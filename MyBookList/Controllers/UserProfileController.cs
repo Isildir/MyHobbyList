@@ -6,6 +6,7 @@ using MyHobbyList.ViewModels;
 using System.Data.Entity;
 using AutoMapper;
 using System;
+using MyHobbyList.FunctionalClasses;
 
 namespace MyHobbyList.Controllers
 {
@@ -62,18 +63,42 @@ namespace MyHobbyList.Controllers
                 GamesList = MapEntitiesToIndexViewModels<Game, GameIndexViewModel>(gamesList)
             };
 
+            foreach (var score in userData.Scores)
+            {
+                switch (score.ElementType)
+                {
+                    case ElementType.Book:
+                        if (view.BooksList.Any(x => x.Id == score.EntityId))
+                            view.BooksList.FirstOrDefault(x => x.Id == score.EntityId).YourScore = score.Value;
+                        break;
+                    case ElementType.Game:
+                        if (view.GamesList.Any(x => x.Id == score.EntityId))
+                            view.GamesList.FirstOrDefault(x => x.Id == score.EntityId).YourScore = score.Value;
+                        break;
+                    case ElementType.Movie:
+                        if (view.MoviesList.Any(x => x.Id == score.EntityId))
+                            view.MoviesList.FirstOrDefault(x => x.Id == score.EntityId).YourScore = score.Value;
+                        break;
+                }
+            }
+
             var recommendationsViewModel = new List<SimiliarEntityMiniRecommend>();
 
-            foreach (var item in userData.Reccomendations)
-                recommendationsViewModel.Add(new SimiliarEntityMiniRecommend()
-                {
-                    Id = item.EntityId.Value,
-                    Title = item.Entity.Title,
-                    ElementType = item.ElementType,
-                    ImageId = item.Entity.ImageId,
-                    RecommenderEmail = item.FromUserEmail,
-                    Message = item.Message
-                });
+            if (Session["Showed"] == null)
+            {
+                foreach (var item in userData.Reccomendations.Take(GlobalVariables.RecommendCount))
+                    recommendationsViewModel.Add(new SimiliarEntityMiniRecommend()
+                    {
+                        Id = item.EntityId.Value,
+                        Title = item.Entity.Title,
+                        ElementType = item.ElementType,
+                        ImageId = item.Entity.ImageId,
+                        RecommenderEmail = item.FromUserEmail,
+                        Message = item.Message
+                    });
+                
+                Session["Showed"] = true;
+            }
 
             view.RecommendedEntities = recommendationsViewModel;
 
@@ -82,13 +107,20 @@ namespace MyHobbyList.Controllers
             return View(view);
         }
 
+        public ActionResult ShowRecommendationsAgain()
+        {
+            Session["Showed"] = null;
+
+            return RedirectToAction("Index");
+        }
+
         public EmptyResult AddScore(int id, int elementTypeNumber, short score)
         {
             var user = GetUserData();
             var elementType = (ElementType)elementTypeNumber;
 
             var entityScore = user.Scores.FirstOrDefault(e => e.EntityId == id && e.ElementType == elementType);
-            var entity = GetEntity(id, elementType, user.UserId);
+            var entity = GetEntity(id, elementType, null);
 
             if (entity == null)
                 return null;
@@ -146,9 +178,7 @@ namespace MyHobbyList.Controllers
         public ActionResult SendTicket(Ticket form)
         {
             if (!ModelState.IsValid)
-            {
                 return PartialView("_SendTicket", form);
-            }
 
             var user = GetUserData();
             //form.UserId = user.UserId;
@@ -198,7 +228,7 @@ namespace MyHobbyList.Controllers
             else
                 TempData.Add("fail", "Something went wrong");
 
-            return RedirectToAction(string.Format("Details/{0}", id), System.Enum.GetName(typeof(ElementType), elementType).ToString());
+            return RedirectToAction("Index");
         }
         
         public ActionResult Recommend(string userName, string title, Recommend model)

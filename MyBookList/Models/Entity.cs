@@ -23,9 +23,10 @@ namespace MyHobbyList.Models
         [Required]
         public ElementType ElementType { get; set; }
 
+        [Required]
         public int GenreId { get; set; }
 
-        [Required, ForeignKey("GenreId"), Display(Name = "Gatunek")]
+        [ForeignKey("GenreId")]
         public virtual Genre Genre { get; set; }
 
         [StringLength(800), Display(Name = "Opis")]

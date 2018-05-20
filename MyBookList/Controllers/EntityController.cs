@@ -67,31 +67,59 @@ namespace MyHobbyList.Controllers
         
         protected Entity SameAuthorEntity(int id, string maker, ElementType elementType)
         {
+            List<int> ids;
+            int number;
+
             switch (elementType)
             {
                 case ElementType.Book:
-                    return _context.Books.Include(a => a.Genre).FirstOrDefault(x => x.Id != id && x.Author.Equals(maker));
+                    ids = _context.Books.Include(a => a.Genre).Where(x => x.Id != id && x.Author.Equals(maker)).Select(x => x.Id).ToList();
+                    if (ids.Count() == 0)
+                        return null;
+                    number = ids[new Random().Next(0, ids.Count() - 1)];
+                    return _context.Books.Include(a => a.Genre).FirstOrDefault(x => x.Id == number);
                 case ElementType.Game:
-                    return _context.Games.Include(a => a.Genre).FirstOrDefault(x => x.Id != id && x.Studio.Equals(maker));
+                    ids = _context.Games.Include(a => a.Genre).Where(x => x.Id != id && x.Studio.Equals(maker)).Select(x => x.Id).ToList();
+                    if (ids.Count() == 0)
+                        return null;
+                    number = ids[new Random().Next(0, ids.Count() - 1)];
+                    return _context.Games.Include(a => a.Genre).FirstOrDefault(x => x.Id == number);
                 case ElementType.Movie:
-                    return _context.Movies.Include(a => a.Genre).FirstOrDefault(x => x.Id != id && x.Director.Equals(maker));
+                    ids = _context.Movies.Include(a => a.Genre).Where(x => x.Id != id && x.Director.Equals(maker)).Select(x => x.Id).ToList();
+                    if (ids.Count() == 0)
+                        return null;
+                    number = ids[new Random().Next(0, ids.Count() - 1)];
+                    return _context.Movies.Include(a => a.Genre).FirstOrDefault(x => x.Id == number);
                 default:
                     return null;
             }
         }
 
-        protected IList<T> SameGenreEntities<T>(int id, Genre genre, int incrementor) where T : Entity
+        protected IList<T> SameGenreEntities<T>(int id, Genre genre, int entityId) where T : Entity
         {
             var ids = _context.Set<T>().Where(x => x.Genre.Id == genre.Id && x.Id != id).Select(x => x.Id).ToList();
-            if (ids.Count() < GlobalVariables.SimiliarListSize + incrementor)
+            
+
+            if (entityId != 0)
+                ids.Remove(entityId);
+
+            if (ids.Count() < GlobalVariables.SimiliarListSize)
                 return null;
+
+            if (ids.Count() == GlobalVariables.SimiliarListSize)
+                return _context.Set<T>().Include(a => a.Genre).Where(x => ids.Contains(x.Id)).ToList<T>();
 
             List<int> randNumbers = new List<int>();
 
             Random r = new Random();
 
-            for (int i = 0; i < GlobalVariables.SimiliarListSize + incrementor; i++)
-                randNumbers.Add(ids[r.Next(0, ids.Count())]);
+            while(randNumbers.Count < GlobalVariables.SimiliarListSize - (entityId != 0 ? 1 : 0))
+            {
+                var random = r.Next(0, ids.Count() - 1);
+
+                if (!randNumbers.Contains(ids[random]))
+                    randNumbers.Add(ids[random]);
+            }
 
             return _context.Set<T>().Include(a => a.Genre).Where(x => randNumbers.Contains(x.Id)).ToList<T>();
         }
