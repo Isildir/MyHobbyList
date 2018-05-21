@@ -1,4 +1,6 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -46,6 +48,15 @@ namespace MyHobbyList.Models
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+    }
+
+    public class MyDbConfiguration : DbConfiguration
+    {
+        public MyDbConfiguration() : base()
+        {
+            var path = Path.GetDirectoryName(this.GetType().Assembly.Location);
+            SetModelStore(new DefaultDbModelStore(path));
         }
     }
 }
