@@ -10,15 +10,14 @@ namespace MyHobbyList
         {
             bundles.Add(new ScriptBundle("~/bundles/lib").Include(
                         "~/Scripts/jquery-{version}.js",
-                        "~/Scripts/bootstrap.js",
-                        "~/Scripts/respond.js",
-                        "~/scripts/datatables/jquery.datatables.js",
-                        "~/scripts/datatables/datatables.bootstrap.js",
+                        "~/Scripts/bootstrap.min.js",
+                        //"~/Scripts/respond.js",
+                        "~/scripts/datatables/jquery.datatables.min.js",
+                        "~/scripts/datatables/datatables.bootstrap.min.js",
                         "~/scripts/toastr.js"
                         ));
             
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-            "~/Scripts/jquery.unobtrusive-ajax.js",
             "~/Scripts/jquery.unobtrusive-ajax.min.js",
             "~/Scripts/jquery.validate*",
             "~/Scripts/jquery.validate.unobtrusive.js",

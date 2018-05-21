@@ -55,7 +55,7 @@ body{
 }
 
 .item:nth-child(1) {
-    background: url(/Content/Images/WithBook.png) no-repeat center center fixed;
+    background: url(/Content/Images/WithBook.jpg) no-repeat center center fixed;
     background-size: cover;
 }
 

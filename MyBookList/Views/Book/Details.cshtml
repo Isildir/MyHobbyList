@@ -5,8 +5,8 @@
 
     var user = Request.IsAuthenticated;
     var isUserActive = user && (MyHobbyList.Models.AccountState)ViewBag.IsBanned == MyHobbyList.Models.AccountState.Active ? true : false;
-    var isOwner = (bool)ViewBag.IsOwner;
-    var alreadyAdded = (bool)ViewBag.AlreadyAdded;
+    var isOwner = ViewBag.IsOwner != null ? (bool)ViewBag.IsOwner : false;
+    var alreadyAdded = ViewBag.AlreadyAdded != null ? (bool)ViewBag.AlreadyAdded : false;
 
     var admin = this.User.IsInRole("Admin");
 }
@@ -87,10 +87,6 @@
                     <p>@item.UserLogin</p>
                     <p>@item.DateAdded.Day/@item.DateAdded.Month/@item.DateAdded.Year</p>
                 </div>
-            </div>
-            <div class="like_it" style="border:1px solid white;">
-                <i class="glyphicon glyphicon-thumbs-up" style="font-size:20px; float: right;color:lightblue;text-shadow:2px 2px 4px #000000;"></i>
-                <button id="like">I Like It!</button>
             </div>
         }
     </div>

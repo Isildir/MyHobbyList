@@ -26,7 +26,6 @@ namespace MyHobbyList.Controllers
             var userData = GetUserData().Entities.Where(x => x.ElementType.ToString().Equals(typeof(T).Name)).Select(x => x.Id).ToList();
 
             return _context.Set<T>().Include(a => a.Genre).AsNoTracking().Where(x => userData.Contains(x.Id)).ToList<T>();
-                
         }
     }
 }

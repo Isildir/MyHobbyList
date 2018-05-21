@@ -209,33 +209,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201805011608182_modelRework.cs" />
-    <Compile Include="Migrations\201805011608182_modelRework.Designer.cs">
-      <DependentUpon>201805011608182_modelRework.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805081834488_check.cs" />
-    <Compile Include="Migrations\201805081834488_check.Designer.cs">
-      <DependentUpon>201805081834488_check.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805131227091_fixToTickets.cs" />
-    <Compile Include="Migrations\201805131227091_fixToTickets.Designer.cs">
-      <DependentUpon>201805131227091_fixToTickets.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805171729543_anotherFixToTickets.cs" />
-    <Compile Include="Migrations\201805171729543_anotherFixToTickets.Designer.cs">
-      <DependentUpon>201805171729543_anotherFixToTickets.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805172018494_ChangesToRecommendationClass.cs" />
-    <Compile Include="Migrations\201805172018494_ChangesToRecommendationClass.Designer.cs">
-      <DependentUpon>201805172018494_ChangesToRecommendationClass.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805172020234_RevertingChangesToRecommendationClass.cs" />
-    <Compile Include="Migrations\201805172020234_RevertingChangesToRecommendationClass.Designer.cs">
-      <DependentUpon>201805172020234_RevertingChangesToRecommendationClass.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805172201320_FixToRecommend.cs" />
-    <Compile Include="Migrations\201805172201320_FixToRecommend.Designer.cs">
-      <DependentUpon>201805172201320_FixToRecommend.cs</DependentUpon>
+    <Compile Include="Migrations\201805210617135_azureDBUpdate.cs" />
+    <Compile Include="Migrations\201805210617135_azureDBUpdate.Designer.cs">
+      <DependentUpon>201805210617135_azureDBUpdate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account\AccountViewModels.cs" />
@@ -376,13 +352,13 @@
     <Content Include="Content\DataTables\swf\flashExport.swf" />
     <Content Include="Content\Images\default.jpg" />
     <Content Include="Content\demos.css" />
+    <Content Include="Content\Images\WithBook.jpg" />
     <Content Include="Content\jquery.Jcrop.css" />
     <Content Include="Content\main.css" />
     <Content Include="Content\styles\AdminStyles.css" />
     <Content Include="Content\styles\DetailsPage.css" />
     <Content Include="Content\styles\MainPage.css" />
     <Content Include="Content\Images\graystar.png" />
-    <Content Include="Content\Images\WithBook.png" />
     <Content Include="Content\styles\Modals.css" />
     <Content Include="Content\styles\RecommendModal.css" />
     <Content Include="Content\styles\UserStyles.css" />
@@ -574,26 +550,8 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805011608182_modelRework.resx">
-      <DependentUpon>201805011608182_modelRework.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805081834488_check.resx">
-      <DependentUpon>201805081834488_check.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805131227091_fixToTickets.resx">
-      <DependentUpon>201805131227091_fixToTickets.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805171729543_anotherFixToTickets.resx">
-      <DependentUpon>201805171729543_anotherFixToTickets.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805172018494_ChangesToRecommendationClass.resx">
-      <DependentUpon>201805172018494_ChangesToRecommendationClass.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805172020234_RevertingChangesToRecommendationClass.resx">
-      <DependentUpon>201805172020234_RevertingChangesToRecommendationClass.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805172201320_FixToRecommend.resx">
-      <DependentUpon>201805172201320_FixToRecommend.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201805210617135_azureDBUpdate.resx">
+      <DependentUpon>201805210617135_azureDBUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
