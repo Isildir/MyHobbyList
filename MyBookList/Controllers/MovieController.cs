@@ -216,7 +216,7 @@ namespace MyHobbyList.Controllers
 
                 if (entity.ImageId == GlobalVariables.DefaultImageId)
                     entity.ImageId = imageId;
-                else
+                else if (imageId != GlobalVariables.DefaultImageId)
                 {
                     _context.Files.Remove(_context.Files.Single(x => x.Id == entity.ImageId));
 

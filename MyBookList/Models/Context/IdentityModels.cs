@@ -1,10 +1,12 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace MyHobbyList.Models
 {
@@ -25,7 +27,6 @@ namespace MyHobbyList.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-
         public DbSet<Book> Books { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Game> Games { get; set; }
@@ -55,7 +56,16 @@ namespace MyHobbyList.Models
     {
         public MyDbConfiguration() : base()
         {
-            var path = Path.GetDirectoryName(this.GetType().Assembly.Location);
+            string path;
+            try
+            {
+                LocalResource myConfigsStorage = RoleEnvironment.GetLocalResource("EFCache");
+                path = Path.GetDirectoryName(myConfigsStorage.RootPath + GetType());
+            }
+            catch(Exception e)
+            {
+                path = Path.GetDirectoryName(GetType().Assembly.Location);
+            }
             SetModelStore(new DefaultDbModelStore(path));
         }
     }

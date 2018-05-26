@@ -15,17 +15,17 @@
     </div>
 </div>
 <div style="background-color: black;opacity:0.7;margin-top:75px" class="jumbotron">
-    <h1 style="text-align: center; font-family: Lato; font-style: italic; font-size:80px">Welcome to</h1>
-    <p style="text-align: center; color: lightgray; font-size: 30px">MyHobbyList</p>
-    <p style="text-align:center;padding-top: 50px; font-size: 16px; width: 70%; margin: 50px auto 0 auto">
-        Our website is created by users.It's very easy.Simply create an account to add your favorite books, series, games or videos and share them with your friends.You can also add to your favorite items added by others,or simply rate them.
-    </p>
-
-    @Html.ActionLink("Join Us!", "Register", "Account", null, new { @class = "buttonReg" })
-</div>
-
-<div class="row">
-
-</div>
-
-<script>$('.carousel').carousel();</script>
+    <div style="background-color: red;opacity:0.9;color:blue;position:absolute;right:20px;top:60px;width:220px;padding:20px" class="jumbotron">
+        <p>Admin account: Login: Admin@gmail.com password: Admin123.</p>
+        <p>User account: Login: User@gmail.com password: User123.</p>
+    </div>   
+        <h1 style="text-align: center; font-family: Lato; font-style: italic; font-size:80px">Welcome to</h1>
+        <p style="text-align: center; color: lightgray; font-size: 30px">MyHobbyList V.2</p>
+        <p style="text-align:center;padding-top: 50px; font-size: 16px; width: 70%; margin: 50px auto 0 auto">
+            Our website is created by users.It's very easy.Simply create an account to add your favorite books, games or videos and share them with your friends.You can also add to your favorite, items added by others,or simply rate them.
+        </p>
+        @Html.ActionLink("Join Us!", "Register", "Account", null, new { @class = "buttonReg" })
+    </div>
+    <div class="row">
+    </div>
+    <script>$('.carousel').carousel();</script>
